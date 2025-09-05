@@ -1,213 +1,691 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REUSEMI - Trocas Sustentáveis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Poppins:wght@600..800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <meta name="description" content="Plataforma de trocas sustentáveis que promove o consumo consciente">
-    <link rel="icon" type="image/png" href="img/web/icons8-sinal-de-reciclagem-color-16.png">
+    <title>EcoMarket - Compre, venda e recicle!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --verde-principal: #2E8B57;
+            --verde-escuro: #1D5D38;
+            --verde-claro: #43C37D;
+            --branco: #FFFFFF;
+            --cinza-claro: #F5F5F5;
+            --cinza-escuro: #333333;
+        }
         
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+        }
+        
+        /* Cabeçalho */
+        header {
+            background-color: var(--branco);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            color: var(--verde-principal);
+            font-size: 24px;
+            margin-left: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--verde-principal);
+            font-size: 28px;
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid var(--verde-claro);
+            border-radius: 25px;
+            font-size: 16px;
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--verde-principal);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        .user-actions a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: var(--cinza-escuro);
+            font-weight: 500;
+        }
+        
+        .user-actions .btn-anunciar {
+            background-color: var(--verde-principal);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+        
+        /* Navegação */
+        nav {
+            background-color: var(--verde-principal);
+            padding: 10px 0;
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+        }
+        
+        .categories li a {
+            color: var(--branco);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        .categories li a:hover {
+            background-color: var(--verde-escuro);
+        }
+        
+        /* Banner */
+        .banner {
+            background: linear-gradient(to right, var(--verde-principal), var(--verde-claro));
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .banner h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .banner p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Conteúdo principal */
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            width: 25%;
+            background-color: var(--branco);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .filters h2 {
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--cinza-escuro);
+        }
+        
+        .filter-options {
+            list-style: none;
+        }
+        
+        .filter-options li {
+            margin-bottom: 5px;
+        }
+        
+        .filter-options a {
+            text-decoration: none;
+            color: var(--cinza-escuro);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .filter-options a:hover {
+            color: var(--verde-principal);
+        }
+        
+        .products {
+            width: 75%;
+        }
+        
+        .section-title {
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .view-all {
+            font-size: 14px;
+            color: var(--verde-claro);
+            text-decoration: none;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: var(--branco);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            height: 150px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            position: relative;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--verde-claro);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--verde-escuro);
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        
+        .product-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-location {
+            font-size: 12px;
+            color: #777;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-location i {
+            margin-right: 5px;
+        }
+        
+        /* Destaques */
+        .featured {
+            margin-top: 30px;
+        }
+        
+        /* Benefícios */
+        .benefits {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .benefit {
+            flex: 1;
+            padding: 20px;
+            background-color: var(--branco);
+            margin: 0 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .benefit i {
+            font-size: 2.5rem;
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+        }
+        
+        .benefit h3 {
+            color: var(--verde-escuro);
+            margin-bottom: 10px;
+        }
+        
+        /* Rodapé */
+        footer {
+            background-color: var(--verde-escuro);
+            color: var(--branco);
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer-section {
+            width: 30%;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            color: var(--branco);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+        
+        .social-icons {
+            display: flex;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 35px;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--verde-claro);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .search-bar {
+                margin: 15px 0;
+                width: 100%;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar, .products {
+                width: 100%;
+            }
+            
+            .categories {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .categories li {
+                margin: 5px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+            
+            .footer-section {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .benefits {
+                flex-direction: column;
+            }
+            
+            .benefit {
+                margin: 10px 0;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
     </style>
 </head>
-
 <body>
-    <!-- Navbar Premium -->
-    <header class="navbar navbar-expand-lg">
+    <header>
         <div class="container">
-            <a href="index.html" class="navbar-brand">
-                <span class="logo-icon">♻️</span>
-                <span>REUSEMI</span>
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="bi bi-list"></i>
-            </button>
-            
-            <nav class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link active">
-                            <i class="bi bi-house-door"></i> Início
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="categorias.html" class="nav-link">
-                            <i class="bi bi-tags"></i> Categorias
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle"></i> Minha Conta
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="perfil.html">Meu Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="login.html">Sair</a></li>
-                            <li><a class="dropdown-item text-warning" href="admin.html">Área Admin</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="login.html" class="nav-link">
-                            <i class="bi bi-box-arrow-in-right"></i> Entrar
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="cadastro.html" class="nav-link btn btn-outline-primary ms-2">
-                            <i class="bi bi-person-plus"></i> Cadastrar
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">♻️</span>
+                    <h1>EcoMarket</h1>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="O que você está procurando?">
+                    <button>Buscar</button>
+                </div>
+                <div class="user-actions">
+                    <a th:href="@{/login}"><i class="fas fa-user"></i> Entrar</a>
+                    <a th:href="@{/anunciar}" class="btn-anunciar"><i class="fas fa-plus"></i> Anunciar</a>
+                </div>
+            </div>
         </div>
     </header>
-
-    <!-- Hero Section Premium -->
-    <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="container hero-container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="hero-title animate__animated animate__fadeInUp">
-                        Transforme objetos em <span class="text-highlight"><b>oportunidades</b> </span> sustentáveis
-                    </h1>
-                    <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">
-                        Participe da rede colaborativa que está revolucionando o consumo consciente no Brasil
-                    </p>
-                    <div class="hero-cta animate__animated animate__fadeInUp animate__delay-2s">
-                        <a href="categorias.html" class="btn btn-primary btn-lg me-3">
-                            <i class="bi bi-arrow-repeat"></i> Começar a trocar
-                        </a>
-                        <a href="#como-funciona" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-play-circle"></i> Como funciona
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="img/web/assets_task_01jvngttq4ehn9q3388sd9a3kn_1747700308_img_0.png" alt="Trocas sustentáveis" class="hero-image img-fluid">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="como-funciona" class="features-section">
+    
+    <nav>
         <div class="container">
-        </br>
-            <h2 class="section-title text-center">Como funciona a REUSEMI</h2>
-            <p class="section-subtitle text-center mb-5">Uma plataforma simples para um impacto grande</p>
+            <ul class="categories">
+                <li><a href="#">Eletrônicos</a></li>
+                <li><a href="#">Casa e Móveis</a></li>
+                <li><a href="#">Moda e Beleza</a></li>
+                <li><a href="#">Esportes</a></li>
+                <li><a href="#">Veículos</a></li>
+                <li><a href="#">Imóveis</a></li>
+                <li><a href="#">Produtos Reciclados</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="banner">
+            <h2>Economize e Ajude o Planeta!</h2>
+            <p>Compre, venda e troque produtos usados. Dê uma nova vida para itens que merecem ser reutilizados.</p>
+        </div>
+        
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="filters">
+                    <h2>Filtros</h2>
+                    <div class="filter-group">
+                        <h3>Localização</h3>
+                        <input type="text" placeholder="Digite sua cidade" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div class="filter-group">
+                        <h3>Categoria</h3>
+                        <ul class="filter-options">
+                            <li><a href="#">Celulares (125)</a></li>
+                            <li><a href="#">Computadores (78)</a></li>
+                            <li><a href="#">Eletrodomésticos (54)</a></li>
+                            <li><a href="#">Móveis (92)</a></li>
+                            <li><a href="#">Roupas (167)</a></li>
+                        </ul>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Preço</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" placeholder="Mínimo" style="width: 50%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <input type="number" placeholder="Máximo" style="width: 50%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Condição</h3>
+                        <ul class="filter-options">
+                            <li><a href="#">Novo (234)</a></li>
+                            <li><a href="#">Usado (567)</a></li>
+                            <li><a href="#">Recondicionado (89)</a></li>
+                        </ul>
+                    </div>
+                    <button style="width: 100%; padding: 10px; background-color: var(--verde-principal); color: white; border: none; border-radius: 4px; cursor: pointer;">Aplicar Filtros</button>
+                </div>
+            </aside>
             
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon bg-primary-light">
-                            <i class="bi bi-search"></i>
+            <main class="products">
+                <h2 class="section-title">
+                    Anúncios em Destaque
+                    <a href="#" class="view-all">Ver todos</a>
+                </h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-badge">Destaque</span>
+                            Imagem do Produto
                         </div>
-                        <h3>Encontre</h3>
-                        <p>Descubra itens disponíveis para troca perto de você em diversas categorias.</p>
+                        <div class="product-info">
+                            <div class="product-price">R$ 1.200,00</div>
+                            <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado de conservação</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            Imagem do Produto
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">R$ 850,00</div>
+                            <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-badge">Oferta</span>
+                            Imagem do Produto
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">R$ 300,00</div>
+                            <div class="product-title">Bicicleta Caloi aro 29, perfeito para exercícios</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            Imagem do Produto
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">R$ 2.500,00</div>
+                            <div class="product-title">Notebook Dell i7, 16GB RAM, SSD 512GB</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Brasília, DF</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon bg-primary">
-                            <i class="bi bi-arrow-left-right"></i>
+                
+                <div class="featured">
+                    <h2 class="section-title">
+                        Produtos Sustentáveis
+                        <a href="#" class="view-all">Ver todos</a>
+                    </h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Eco</span>
+                                Imagem do Produto
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">R$ 45,00</div>
+                                <div class="product-title">EcoBag feita de material reciclado, resistente</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Florianópolis, SC</div>
+                            </div>
                         </div>
-                        <h3>Conecte</h3>
-                        <p>Entre em contato com outros usuários e combine a troca de forma segura.</p>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                Imagem do Produto
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">R$ 120,00</div>
+                                <div class="product-title">Conjunto de vasos de jardim com material reciclado</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Recife, PE</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Eco</span>
+                                Imagem do Produto
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">R$ 85,00</div>
+                                <div class="product-title">Luminária de mesa feita com garrafas pet recicladas</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Manaus, AM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                Imagem do Produto
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">R$ 200,00</div>
+                                <div class="product-title">Móveis de jardim com pallets reciclados</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-card">
-                        <div class="feature-icon bg-secondary">
-                            <i class="bi bi-recycle"></i>
-                        </div>
-                        <h3>Troque</h3>
-                        <p>Complete a troca e contribua para um consumo mais consciente e sustentável.</p>
-                    </div>
-                </div>
+            </main>
+        </div>
+        
+        <div class="benefits">
+            <div class="benefit">
+                <i class="fas fa-recycle"></i>
+                <h3>Ajude o Meio Ambiente</h3>
+                <p>Reduza o desperdício dando uma segunda vida aos produtos</p>
+            </div>
+            <div class="benefit">
+                <i class="fas fa-money-bill-wave"></i>
+                <h3>Economize Dinheiro</h3>
+                <p>Compre produtos de qualidade por preços acessíveis</p>
+            </div>
+            <div class="benefit">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Compras Seguras</h3>
+                <p>Transações protegidas e verificação de vendedores</p>
             </div>
         </div>
-        </br>
-    </section>
-
-    <!-- Footer Premium -->
-    <footer class="footer">
+    </div>
+    
+    <footer>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="footer-brand">
-                        <span class="logo-icon">♻️</span>
-                        <span class="fw-bold">REUSEMI</span>
-                    </div>
-                    <p class="mt-3">Promovendo trocas sustentáveis e consumo consciente desde 2025.</p>
-                    <div class="social-links mt-4">
-                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>EcoMarket</h3>
+                    <p>O lugar ideal para comprar, vender e contribuir com o meio ambiente através da reciclagem e reutilização de produtos.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h5 class="footer-title">Links Rápidos</h5>
-                    <ul class="footer-links">
-                        <li><a href="categorias.html">Categorias</a></li>
-                        <li><a href="index.html#como-funciona">Como funciona</a></li>
-                        <li><a href="#">Termos de uso</a></li>
-                        <li><a href="#">Política de privacidade</a></li>
+                
+                <div class="footer-section">
+                    <h3>Links Úteis</h3>
+                    <ul>
+                        <li><a href="#">Como vender</a></li>
+                        <li><a href="#">Dicas de segurança</a></li>
+                        <li><a href="#">Perguntas frequentes</a></li>
+                        <li><a href="#">Sustentabilidade</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Contato</h5>
-                    <ul class="footer-contact">
-                        <li><i class="bi bi-envelope"></i> contato@reusemi.com</li>
-                        <li><i class="bi bi-whatsapp"></i> (11) 98765-4321</li>
-                        <li><i class="bi bi-geo-alt"></i> São José dos Campos, São Paulo, Brasil</li>
+                
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Fale conosco</a></li>
+                        <li><a href="#">Anuncie</a></li>
+                        <li><a href="#">Trabalhe conosco</a></li>
+                        <li><a href="#">Seja um parceiro</a></li>
                     </ul>
-                </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Newsletter</h5>
-                    <p>Assine para receber dicas de consumo sustentável.</p>
-                    <form class="newsletter-form">
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Seu email">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="bi bi-send"></i>
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
-            <hr class="footer-divider">
-            <div class="footer-bottom">
-                <p class="mb-0">&copy; 2025 REUSEMI. Todos os direitos reservados.</p>  
+            
+            <div class="copyright">
+                <p>&copy; 2023 EcoMarket - Todos os direitos reservados. ♻️</p>
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Inicializa AOS (Animate On Scroll)
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
-        
-        // Adiciona classe scrolled na navbar quando rolar a página
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    </script>
 </body>
 </html>

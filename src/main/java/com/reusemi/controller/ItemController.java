@@ -4,59 +4,72 @@ import com.reusemi.model.Item;
 import com.reusemi.model.Usuario;
 import com.reusemi.repo.ItemRepository;
 import com.reusemi.repo.UsuarioRepository;
-import jakarta.validation.constraints.NotBlank;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Controller
-@Validated
+@RequestMapping("/itens")
 public class ItemController {
-    private final ItemRepository itemRepository;
-    private final UsuarioRepository usuarioRepository;
 
-    public ItemController(ItemRepository itemRepository, UsuarioRepository usuarioRepository) {
-        this.itemRepository = itemRepository;
-        this.usuarioRepository = usuarioRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @GetMapping
+    public String listarItens(Model model) {
+        model.addAttribute("itens", itemRepository.findByDisponivelTrue());
+        return "itens/lista";
     }
 
-    @GetMapping("/categorias")
-    public String categorias(Model model) {
-        List<String> categorias = itemRepository.findDistinctCategorias();
-        model.addAttribute("categorias", categorias);
-        return "categorias";
+    @GetMapping("/meus-itens")
+    public String meusItens(Principal principal, Model model) {
+        Usuario usuario = usuarioRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
+        // Use o método correto - por ID do usuário (mais eficiente)
+        model.addAttribute("itens", itemRepository.findByUsuarioId(usuario.getId()));
+        return "itens/meus-itens";
     }
 
-    @GetMapping("/anunciar")
-    public String anunciarPage() { return "anunciar"; }
+    @GetMapping("/novo")
+    public String novoItem() {
+        return "itens/novo";
+    }
 
-    @PostMapping("/anunciar")
-    public String anunciar(@AuthenticationPrincipal User user,
-                           @RequestParam @NotBlank String nome,
-                           @RequestParam(required = false) String descricao,
-                           @RequestParam(required = false) String categoria,
-                           @RequestParam(required = false) String cidade) {
-        if (user == null) return "redirect:/login";
-        Usuario dono = usuarioRepository.findByEmail(user.getUsername()).orElseThrow();
+    @PostMapping("/novo")
+    public String criarItem(@RequestParam String titulo,
+                           @RequestParam String descricao,
+                           @RequestParam String categoria,
+                           @RequestParam String condicao,
+                           Principal principal) {
+        Usuario usuario = usuarioRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
         Item item = new Item();
-        item.setNome(nome);
+        item.setTitulo(titulo);
         item.setDescricao(descricao);
         item.setCategoria(categoria);
-        item.setCidade(cidade);
-        item.setDono(dono);
+        item.setCondicao(condicao);
+        item.setUsuario(usuario);
+        item.setDataCriacao(LocalDateTime.now());
+        
         itemRepository.save(item);
-        return "redirect:/perfil";
+        return "redirect:/itens/meus-itens?sucesso=true";
     }
 
-    @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String admin() { return "admin"; }
+    @PostMapping("/{id}/disponivel")
+    public String toggleDisponivel(@PathVariable Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item não encontrado"));
+        item.setDisponivel(!item.isDisponivel());
+        itemRepository.save(item);
+        return "redirect:/itens/meus-itens";
+    }
 }

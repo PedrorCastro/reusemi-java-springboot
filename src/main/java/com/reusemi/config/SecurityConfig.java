@@ -21,7 +21,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/cadastro", "/favicon.ico", "/trocas_sustentaveis.png", "/css/**", "/js/**", "/img/**").permitAll()
+                .requestMatchers("/", "/home", "/index", "/inicio").permitAll()
+                .requestMatchers("/login", "/cadastro", "/register", "/sobre", "/como-funciona").permitAll()
+                .requestMatchers("/favicon.ico", "/trocas_sustentaveis.png").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**").permitAll()
                 .requestMatchers("/admin/**", "/exportar-usuarios").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

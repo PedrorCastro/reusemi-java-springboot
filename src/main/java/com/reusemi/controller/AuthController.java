@@ -2,62 +2,64 @@ package com.reusemi.controller;
 
 import com.reusemi.model.Usuario;
 import com.reusemi.repo.UsuarioRepository;
-import com.reusemi.service.UsuarioService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@Validated
 public class AuthController {
 
-    private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public AuthController(UsuarioService usuarioService, UsuarioRepository usuarioRepository) {
-        this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    
     @GetMapping("/login")
-    public String loginPage() {
+    public String login() {
         return "login";
     }
 
     @GetMapping("/cadastro")
-    public String cadastroPage() {
+    public String cadastro() {
         return "cadastro";
     }
 
+    // ESTE método deve ficar APENAS no AuthController
     @PostMapping("/cadastro")
-    public String cadastrar(@RequestParam @NotBlank String nome,
-                            @RequestParam @Email String email,
-                            @RequestParam @NotBlank String senha,
-                            Model model) {
-        try {
-            usuarioService.registrar(nome, email, senha);
-            model.addAttribute("flash", "Cadastro realizado com sucesso!");
-            return "redirect:/login";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "cadastro";
+    public String cadastrarUsuario(@RequestParam String nome,
+                                  @RequestParam String email,
+                                  @RequestParam String senha,
+                                  RedirectAttributes redirectAttributes) {
+        
+        if (usuarioRepository.findByEmail(email).isPresent()) {
+            redirectAttributes.addFlashAttribute("erro", "Email já cadastrado");
+            return "redirect:/cadastro";
         }
+        
+        Usuario novoUsuario = new Usuario();
+        novoUsuario.setNome(nome);
+        novoUsuario.setEmail(email);
+        novoUsuario.setSenha(passwordEncoder.encode(senha));
+        novoUsuario.setNivel("USER");
+        
+        usuarioRepository.save(novoUsuario);
+        redirectAttributes.addFlashAttribute("sucesso", "Cadastro realizado com sucesso!");
+        return "redirect:/login";
     }
 
-    @GetMapping("/perfil")
-    public String perfil(@AuthenticationPrincipal User user, Model model) {
-        if (user == null) return "redirect:/login";
-        Usuario u = usuarioRepository.findByEmail(user.getUsername()).orElseThrow();
-        model.addAttribute("usuario", u);
-        return "perfil";
+    @GetMapping("/sobre")
+    public String sobre() {
+        return "sobre";
+    }
+
+    @GetMapping("/como-funciona")
+    public String comoFunciona() {
+        return "como-funciona";
     }
 }

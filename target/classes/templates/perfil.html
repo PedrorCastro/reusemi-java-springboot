@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
  <meta charset="UTF-8">
  <title>Perfil - REUSEMI</title>
@@ -8,54 +8,55 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="navbar navbar-expand-lg">
-    <div class="container">
-        <a href="index.html" class="navbar-brand">
-            <span class="logo-icon">♻️</span>
-            <span>REUSEMI</span>
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <i class="bi bi-list"></i>
-        </button>
-        
-        <nav class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
-                        <i class="bi bi-house-door"></i> Início
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="categorias.html" class="nav-link">
-                        <i class="bi bi-tags"></i> Categorias
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> Minha Conta
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="perfil.html">Meu Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="login.html">Sair</a></li>
-                        <li><a class="dropdown-item text-warning" href="admin.html">Área Admin</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="login.html" class="nav-link">
-                        <i class="bi bi-box-arrow-in-right"></i> Entrar
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="cadastro.html" class="nav-link btn btn-outline-primary ms-2">
-                        <i class="bi bi-person-plus"></i> Cadastrar
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
+  <!-- Navbar Premium -->
+    <header class="navbar navbar-expand-lg">
+      <div class="container">
+          <a th:href="@{/}" class="navbar-brand">
+              <span class="logo-icon">♻️</span>
+              <span th:href="@{/}">REUSEMI</span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <i class="bi bi-list"></i>
+          </button>
+
+          <nav class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                      <a th:href="@{/}" class="nav-link active">
+                          <i class="bi bi-house-door"></i> Início
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a th:href="@{/categorias}" class="nav-link">
+                          <i class="bi bi-tags"></i> Categorias
+                      </a>
+                  </li>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                          <i class="bi bi-person-circle"></i> Minha Conta
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" th:href="@{/perfil}">Meu Perfil</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
+                          <li><a class="dropdown-item text-warning" th:href="@{/admin}">Área Admin</a></li>
+                      </ul>
+                  </li>
+                  <li class="nav-item">
+                      <a th:href="@{/login}" class="nav-link">
+                          <i class="bi bi-box-arrow-in-right"></i> Entrar
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a th:href="@{/cadastro}" class="nav-link btn btn-outline-primary ms-2">
+                          <i class="bi bi-person-plus"></i> Cadastrar
+                      </a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+    </header>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // Fecha o menu mobile ao clicar em um item
