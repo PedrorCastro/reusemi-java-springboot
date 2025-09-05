@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Erro - REUSEMI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <section class="hero">
+      <div class="container">
+        <h2>Oops! Algo deu errado.</h2>
+        <p style="color: red;">{{ error_message }}</p>
+        <p><a href="{{ url_for('index') }}">Voltar para a página inicial</a></p>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 REUSEMI</p>
+      </div>
+    </footer>
+</body>
+</html>

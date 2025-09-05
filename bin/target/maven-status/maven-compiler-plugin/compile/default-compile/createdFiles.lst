@@ -1,0 +1,11 @@
+com\reusemi\config\SecurityConfig.class
+com\reusemi\model\Usuario.class
+com\reusemi\repo\ItemRepository.class
+com\reusemi\controller\ItemController.class
+com\reusemi\controller\AuthController.class
+com\reusemi\service\UsuarioService.class
+com\reusemi\repo\UsuarioRepository.class
+com\reusemi\ReusemiApplication.class
+com\reusemi\controller\HomeController.class
+com\reusemi\model\Item.class
+com\reusemi\controller\ExportController.class

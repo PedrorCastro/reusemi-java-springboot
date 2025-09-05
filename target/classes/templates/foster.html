@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Foster - REUSEMI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Poppins:wght@600..800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <section class="foster-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Programa <span class="text-primary">Foster</span></h1>
+                    <p class="lead mb-4">Temporariamente acolha itens que precisam de um novo lar</p>
+                    <a href="#como-funciona" class="btn btn-primary btn-lg me-3">
+                        <i class="bi bi-info-circle"></i> Como funciona
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{{ url_for('static', filename='images/foster-hero.png') }}" alt="Programa Foster" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="foster-how py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Como funciona o Foster</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper bg-primary mb-3">
+                                <i class="bi bi-house-door text-white"></i>
+                            </div>
+                            <h3>Acolhimento Temporário</h3>
+                            <p>Receba itens que estão aguardando adoção permanente por outros usuários</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper bg-success mb-3">
+                                <i class="bi bi-clock-history text-white"></i>
+                            </div>
+                            <h3>Período Determinado</h3>
+                            <p>Você define por quanto tempo pode ficar com o item (1-3 meses)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="icon-wrapper bg-warning mb-3">
+                                <i class="bi bi-arrow-left-right text-white"></i>
+                            </div>
+                            <h3>Transição Segura</h3>
+                            <p>Quando surgir um adotante permanente, facilitamos a transição</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="foster-benefits py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Benefícios de ser um Foster</h2>
+                    <ul class="benefits-list">
+                        <li>
+                            <i class="bi bi-check-circle-fill text-primary"></i>
+                            <span>Acesso temporário a itens úteis</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-check-circle-fill text-primary"></i>
+                            <span>Contribuição para a economia circular</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-check-circle-fill text-primary"></i>
+                            <span>Pontos bônus na plataforma</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-check-circle-fill text-primary"></i>
+                            <span>Prioridade em futuras trocas</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow">
+                        <div class="card-body p-4">
+                            <h3 class="mb-4">Quero ser um Foster</h3>
+                            <form id="fosterForm">
+                                <div class="mb-3">
+                                    <label for="nome" class="form-label">Nome completo</label>
+                                    <input type="text" class="form-control" id="nome" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="periodo" class="form-label">Período disponível (meses)</label>
+                                    <select class="form-select" id="periodo" required>
+                                        <option value="1">1 mês</option>
+                                        <option value="2">2 meses</option>
+                                        <option value="3">3 meses</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-send"></i> Enviar solicitação
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <style>
+        .foster-hero {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .benefits-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .benefits-list i {
+            font-size: 1.2rem;
+            margin-right: 0.8rem;
+        }
+    </style>
+</body>
+</html>
