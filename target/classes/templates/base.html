@@ -130,6 +130,34 @@
         }
       });
     });
+
+    <script th:unless="${#strings.isEmpty(#httpServletRequest.getHeader('User-Agent')) and #httpServletRequest.getHeader('User-Agent').contains('JavaFX')}">
+    // Detecta se está rodando no WebView do JavaFX
+    if (typeof javaApp !== 'undefined') {
+        console.log('Running in Reusemi Desktop App');
+
+        // Exemplo: enviar mensagem para a aplicação Java
+        document.addEventListener('DOMContentLoaded', function() {
+            javaApp.showMessage('Página carregada com sucesso: ' + window.location.href);
+        });
+
+        // Adicionar botão de fechar aplicação
+        function addDesktopControls() {
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Fechar Aplicação';
+            closeBtn.style.position = 'fixed';
+            closeBtn.style.top = '10px';
+            closeBtn.style.right = '10px';
+            closeBtn.style.zIndex = '1000';
+            closeBtn.onclick = function() {
+                javaApp.exitApplication();
+            };
+            document.body.appendChild(closeBtn);
+        }
+
+        addDesktopControls();
+    }
+    </script>
     </script>
 </body>
 </html>

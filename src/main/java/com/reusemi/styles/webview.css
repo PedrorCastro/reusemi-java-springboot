@@ -1,0 +1,19 @@
+/* Estilos personalizados para o WebView */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Melhora a aparência dos formulários */
+input, select, textarea, button {
+    font-family: inherit;
+}
+
+/* Estilo para a barra de navegação */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Ajusta o tamanho dos containers */
+.container {
+    max-width: 1200px;
+}
