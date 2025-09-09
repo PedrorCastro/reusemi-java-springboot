@@ -19,4 +19,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     // Método para contar itens criados após uma data
     @Query("SELECT COUNT(i) FROM Item i WHERE i.dataCriacao >= :data")
     long countByDataCriacaoAfter(LocalDateTime data);
+
 }
