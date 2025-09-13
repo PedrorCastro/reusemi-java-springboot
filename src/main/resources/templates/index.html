@@ -1,691 +1,258 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REUSEMI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --verde-principal: #2E8B57;
-            --verde-escuro: #1D5D38;
-            --verde-claro: #43C37D;
-            --branco: #FFFFFF;
-            --cinza-claro: #F5F5F5;
-            --cinza-escuro: #333333;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--cinza-claro);
-            color: var(--cinza-escuro);
-        }
-        
-        /* Cabeçalho */
-        header {
-            background-color: var(--branco);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo h1 {
-            color: var(--verde-principal);
-            font-size: 24px;
-            margin-left: 10px;
-        }
-        
-        .logo-icon {
-            color: var(--verde-principal);
-            font-size: 28px;
-        }
-        
-        .search-bar {
-            flex-grow: 1;
-            margin: 0 20px;
-            position: relative;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid var(--verde-claro);
-            border-radius: 25px;
-            font-size: 16px;
-        }
-        
-        .search-bar button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--verde-principal);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-        }
-        
-        .user-actions a {
-            margin-left: 15px;
-            text-decoration: none;
-            color: var(--cinza-escuro);
-            font-weight: 500;
-        }
-        
-        .user-actions .btn-anunciar {
-            background-color: var(--verde-principal);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-        
-        /* Navegação */
-        nav {
-            background-color: var(--verde-principal);
-            padding: 10px 0;
-        }
-        
-        .categories {
-            display: flex;
-            justify-content: space-between;
-            list-style: none;
-        }
-        
-        .categories li a {
-            color: var(--branco);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 3px;
-            transition: background-color 0.3s;
-        }
-        
-        .categories li a:hover {
-            background-color: var(--verde-escuro);
-        }
-        
-        /* Banner */
-        .banner {
-            background: linear-gradient(to right, var(--verde-principal), var(--verde-claro));
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-            margin: 20px 0;
-            border-radius: 8px;
-        }
-        
-        .banner h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .banner p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        /* Conteúdo principal */
-        .main-content {
-            display: flex;
-            margin-top: 20px;
-            gap: 20px;
-        }
-        
-        .sidebar {
-            width: 25%;
-            background-color: var(--branco);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .filters h2 {
-            color: var(--verde-principal);
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .filter-group {
-            margin-bottom: 15px;
-        }
-        
-        .filter-group h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--cinza-escuro);
-        }
-        
-        .filter-options {
-            list-style: none;
-        }
-        
-        .filter-options li {
-            margin-bottom: 5px;
-        }
-        
-        .filter-options a {
-            text-decoration: none;
-            color: var(--cinza-escuro);
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-        
-        .filter-options a:hover {
-            color: var(--verde-principal);
-        }
-        
-        .products {
-            width: 75%;
-        }
-        
-        .section-title {
-            color: var(--verde-principal);
-            margin-bottom: 15px;
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .view-all {
-            font-size: 14px;
-            color: var(--verde-claro);
-            text-decoration: none;
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .product-card {
-            background-color: var(--branco);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .product-image {
-            height: 150px;
-            background-color: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            position: relative;
-        }
-        
-        .product-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--verde-claro);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-        }
-        
-        .product-info {
-            padding: 15px;
-        }
-        
-        .product-price {
-            font-weight: bold;
-            color: var(--verde-escuro);
-            font-size: 18px;
-            margin: 5px 0;
-        }
-        
-        .product-title {
-            font-size: 14px;
-            margin-bottom: 10px;
-            height: 40px;
-            overflow: hidden;
-        }
-        
-        .product-location {
-            font-size: 12px;
-            color: #777;
-            display: flex;
-            align-items: center;
-        }
-        
-        .product-location i {
-            margin-right: 5px;
-        }
-        
-        /* Destaques */
-        .featured {
-            margin-top: 30px;
-        }
-        
-        /* Benefícios */
-        .benefits {
-            display: flex;
-            justify-content: space-between;
-            margin: 40px 0;
-            text-align: center;
-        }
-        
-        .benefit {
-            flex: 1;
-            padding: 20px;
-            background-color: var(--branco);
-            margin: 0 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .benefit i {
-            font-size: 2.5rem;
-            color: var(--verde-principal);
-            margin-bottom: 15px;
-        }
-        
-        .benefit h3 {
-            color: var(--verde-escuro);
-            margin-bottom: 10px;
-        }
-        
-        /* Rodapé */
-        footer {
-            background-color: var(--verde-escuro);
-            color: var(--branco);
-            padding: 30px 0;
-            margin-top: 40px;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .footer-section {
-            width: 30%;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-        
-        .footer-section a {
-            color: var(--branco);
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .footer-section a:hover {
-            text-decoration: underline;
-        }
-        
-        .social-icons {
-            display: flex;
-            margin-top: 15px;
-        }
-        
-        .social-icons a {
-            display: inline-block;
-            width: 35px;
-            height: 35px;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            margin-right: 10px;
-            text-align: center;
-            line-height: 35px;
-            transition: background-color 0.3s;
-        }
-        
-        .social-icons a:hover {
-            background-color: var(--verde-claro);
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 14px;
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-            }
-            
-            .search-bar {
-                margin: 15px 0;
-                width: 100%;
-            }
-            
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .sidebar, .products {
-                width: 100%;
-            }
-            
-            .categories {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .categories li {
-                margin: 5px;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-            }
-            
-            .footer-section {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            
-            .benefits {
-                flex-direction: column;
-            }
-            
-            .benefit {
-                margin: 10px 0;
-            }
-            
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
-    </style>
+    <title>Reusemi</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">♻️</span>
-                    <h1>EcoMarket</h1>
+<header>
+
+    <div class="header-esquerda">
+        <img class="logo" src="img/web/logo.png" alt="logo">
+        <form action="/buscar" method="GET">
+            <button class="buscar" type="submit">Buscar</button>
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+
+        </form>
+    </div>
+
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link" href="#">Chat</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" href="#">Login</a>
+        </nav>
+        <a class="header-special" href="#">Anuncie Grátis</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<div class="categories">
+    <a href="#">Eletrônicos</a>
+    <a href="#">Móveis</a>
+    <a href="#">Moda</a>
+    <a href="#">Esportes</a>
+    <a href="#">Veículos</a>
+    <a href="#">Imóveis</a>
+    <a href="#">Reciclados</a>
+</div>
+
+<div class="container">
+    <div class="banner">
+        <h2>Economize e Ajude o Planeta!</h2>
+        <p>Anuncie, negocie e troque produtos usados. Dê uma nova vida para itens que merecem ser reutilizados.</p>
+    </div>
+
+    <div class="main-content">
+        <aside class="sidebar">
+            <div class="filters">
+                <h2>Filtros</h2>
+                <div class="filter-group">
+                    <h3>Localização</h3>
+                    <input type="text" placeholder="Digite sua cidade" style="width: 94%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
                 </div>
-                <div class="search-bar">
-                    <input type="text" placeholder="O que você está procurando?">
-                    <button>Buscar</button>
+                <div class="filter-group">
+                    <h3>Categoria</h3>
+                    <ul class="filter-options">
+                        <li><a href="#">Celulares (125)</a></li>
+                        <li><a href="#">Computadores (78)</a></li>
+                        <li><a href="#">Eletrodomésticos (54)</a></li>
+                        <li><a href="#">Móveis (92)</a></li>
+                        <li><a href="#">Roupas (167)</a></li>
+                    </ul>
                 </div>
-                <div class="user-actions">
-                    <a th:href="@{/login}"><i class="fas fa-user"></i> Entrar</a>
-                    <a th:href="@{/anunciar}" class="btn-anunciar"><i class="fas fa-plus"></i> Anunciar</a>
+                <div class="filter-group">
+                    <h3>Preço</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" placeholder="Mínimo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                        <input type="number" placeholder="Máximo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3>Condição</h3>
+                    <ul class="filter-options">
+                        <li><a href="#">Novo (234)</a></li>
+                        <li><a href="#">Usado (567)</a></li>
+                        <li><a href="#">Recondicionado (89)</a></li>
+                    </ul>
+                </div>
+                <button class="aplicar">Aplicar Filtros</button>
+            </div>
+        </aside>
+
+        <main class="products">
+            <h2 class="section-title">
+                Anúncios em Destaque
+                <a href="#" class="view-all">Ver todos</a>
+            </h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge">Destaque</span>
+                        <img src="img/web/s20.jpg" alt="">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">Troco por bike</div>
+                        <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado de conservação</div>
+                        <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/web/sofa.jpeg" alt="">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">Aceito propostas...</div>
+                        <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
+                        <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/web/bike.jpg" alt="">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">Procuro tênis!</div>
+                        <div class="product-title">Bicicleta Caloi aro 29, perfeito para exercícios</div>
+                        <div class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge">Destaque</span>
+                        <img src="img/web/note.jpg" alt="">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">Busco celular.</div>
+                        <div class="product-title">Notebook Dell i7, 16GB RAM, SSD 512GB</div>
+                        <div class="product-location"><i class="fas fa-map-marker-alt"></i> Brasília, DF</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
-    
-    <nav>
-        <div class="container">
-            <ul class="categories">
-                <li><a href="#">Eletrônicos</a></li>
-                <li><a href="#">Casa e Móveis</a></li>
-                <li><a href="#">Moda e Beleza</a></li>
-                <li><a href="#">Esportes</a></li>
-                <li><a href="#">Veículos</a></li>
-                <li><a href="#">Imóveis</a></li>
-                <li><a href="#">Produtos Reciclados</a></li>
-            </ul>
-        </div>
-    </nav>
-    
-    <div class="container">
-        <div class="banner">
-            <h2>Economize e Ajude o Planeta!</h2>
-            <p>Compre, venda e troque produtos usados. Dê uma nova vida para itens que merecem ser reutilizados.</p>
-        </div>
-        
-        <div class="main-content">
-            <aside class="sidebar">
-                <div class="filters">
-                    <h2>Filtros</h2>
-                    <div class="filter-group">
-                        <h3>Localização</h3>
-                        <input type="text" placeholder="Digite sua cidade" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <div class="filter-group">
-                        <h3>Categoria</h3>
-                        <ul class="filter-options">
-                            <li><a href="#">Celulares (125)</a></li>
-                            <li><a href="#">Computadores (78)</a></li>
-                            <li><a href="#">Eletrodomésticos (54)</a></li>
-                            <li><a href="#">Móveis (92)</a></li>
-                            <li><a href="#">Roupas (167)</a></li>
-                        </ul>
-                    </div>
-                    <div class="filter-group">
-                        <h3>Preço</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="number" placeholder="Mínimo" style="width: 50%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                            <input type="number" placeholder="Máximo" style="width: 50%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <h3>Condição</h3>
-                        <ul class="filter-options">
-                            <li><a href="#">Novo (234)</a></li>
-                            <li><a href="#">Usado (567)</a></li>
-                            <li><a href="#">Recondicionado (89)</a></li>
-                        </ul>
-                    </div>
-                    <button style="width: 100%; padding: 10px; background-color: var(--verde-principal); color: white; border: none; border-radius: 4px; cursor: pointer;">Aplicar Filtros</button>
-                </div>
-            </aside>
-            
-            <main class="products">
+
+            <div class="featured">
                 <h2 class="section-title">
-                    Anúncios em Destaque
+                    Produtos Sustentáveis
                     <a href="#" class="view-all">Ver todos</a>
                 </h2>
                 <div class="product-grid">
                     <div class="product-card">
                         <div class="product-image">
-                            <span class="product-badge">Destaque</span>
+                            <span class="product-badge">Eco</span>
                             Imagem do Produto
                         </div>
                         <div class="product-info">
-                            <div class="product-price">R$ 1.200,00</div>
-                            <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado de conservação</div>
-                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
+                            <div class="product-price">R$ 45,00</div>
+                            <div class="product-title">EcoBag feita de material reciclado, resistente</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Florianópolis, SC</div>
                         </div>
                     </div>
-                    
+
                     <div class="product-card">
                         <div class="product-image">
                             Imagem do Produto
                         </div>
                         <div class="product-info">
-                            <div class="product-price">R$ 850,00</div>
-                            <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
-                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
+                            <div class="product-price">R$ 120,00</div>
+                            <div class="product-title">Conjunto de vasos de jardim com material reciclado</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Recife, PE</div>
                         </div>
                     </div>
-                    
+
                     <div class="product-card">
                         <div class="product-image">
-                            <span class="product-badge">Oferta</span>
+                            <span class="product-badge">Eco</span>
                             Imagem do Produto
                         </div>
                         <div class="product-info">
-                            <div class="product-price">R$ 300,00</div>
-                            <div class="product-title">Bicicleta Caloi aro 29, perfeito para exercícios</div>
-                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</div>
+                            <div class="product-price">R$ 85,00</div>
+                            <div class="product-title">Luminária de mesa feita com garrafas pet recicladas</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Manaus, AM</div>
                         </div>
                     </div>
-                    
+
                     <div class="product-card">
                         <div class="product-image">
                             Imagem do Produto
                         </div>
                         <div class="product-info">
-                            <div class="product-price">R$ 2.500,00</div>
-                            <div class="product-title">Notebook Dell i7, 16GB RAM, SSD 512GB</div>
-                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Brasília, DF</div>
+                            <div class="product-price">R$ 200,00</div>
+                            <div class="product-title">Móveis de jardim com pallets reciclados</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="featured">
-                    <h2 class="section-title">
-                        Produtos Sustentáveis
-                        <a href="#" class="view-all">Ver todos</a>
-                    </h2>
-                    <div class="product-grid">
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span class="product-badge">Eco</span>
-                                Imagem do Produto
-                            </div>
-                            <div class="product-info">
-                                <div class="product-price">R$ 45,00</div>
-                                <div class="product-title">EcoBag feita de material reciclado, resistente</div>
-                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Florianópolis, SC</div>
-                            </div>
-                        </div>
-                        
-                        <div class="product-card">
-                            <div class="product-image">
-                                Imagem do Produto
-                            </div>
-                            <div class="product-info">
-                                <div class="product-price">R$ 120,00</div>
-                                <div class="product-title">Conjunto de vasos de jardim com material reciclado</div>
-                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Recife, PE</div>
-                            </div>
-                        </div>
-                        
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span class="product-badge">Eco</span>
-                                Imagem do Produto
-                            </div>
-                            <div class="product-info">
-                                <div class="product-price">R$ 85,00</div>
-                                <div class="product-title">Luminária de mesa feita com garrafas pet recicladas</div>
-                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Manaus, AM</div>
-                            </div>
-                        </div>
-                        
-                        <div class="product-card">
-                            <div class="product-image">
-                                Imagem do Produto
-                            </div>
-                            <div class="product-info">
-                                <div class="product-price">R$ 200,00</div>
-                                <div class="product-title">Móveis de jardim com pallets reciclados</div>
-                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+            </div>
+        </main>
+    </div>
+
+    <div class="benefits">
+        <div class="benefit">
+            <i class="fas fa-recycle"></i>
+            <h3>Ajude o Meio Ambiente</h3>
+            <p>Reduza o desperdício dando uma segunda vida aos produtos</p>
         </div>
-        
-        <div class="benefits">
-            <div class="benefit">
-                <i class="fas fa-recycle"></i>
-                <h3>Ajude o Meio Ambiente</h3>
-                <p>Reduza o desperdício dando uma segunda vida aos produtos</p>
-            </div>
-            <div class="benefit">
-                <i class="fas fa-money-bill-wave"></i>
-                <h3>Economize Dinheiro</h3>
-                <p>Compre produtos de qualidade por preços acessíveis</p>
-            </div>
-            <div class="benefit">
-                <i class="fas fa-shield-alt"></i>
-                <h3>Compras Seguras</h3>
-                <p>Transações protegidas e verificação de vendedores</p>
-            </div>
+        <div class="benefit">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>Economize Dinheiro</h3>
+            <p>Compre produtos de qualidade por preços acessíveis</p>
+        </div>
+        <div class="benefit">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Compras Seguras</h3>
+            <p>Transações protegidas e verificação de vendedores</p>
         </div>
     </div>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>EcoMarket</h3>
-                    <p>O lugar ideal para comprar, vender e contribuir com o meio ambiente através da reciclagem e reutilização de produtos.</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Links Úteis</h3>
-                    <ul>
-                        <li><a href="#">Como vender</a></li>
-                        <li><a href="#">Dicas de segurança</a></li>
-                        <li><a href="#">Perguntas frequentes</a></li>
-                        <li><a href="#">Sustentabilidade</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contato</h3>
-                    <ul>
-                        <li><a href="#">Fale conosco</a></li>
-                        <li><a href="#">Anuncie</a></li>
-                        <li><a href="#">Trabalhe conosco</a></li>
-                        <li><a href="#">Seja um parceiro</a></li>
-                    </ul>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EcoMarket</h3>
+                <p>O lugar ideal para comprar, vender e contribuir com o meio ambiente através da reciclagem e reutilização de produtos.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            
-            <div class="copyright">
-                <p>&copy; 2023 EcoMarket - Todos os direitos reservados. ♻️</p>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Como vender</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a href="#">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
+
+        <div class="copyright">
+            <p>&copy; 2023 EcoMarket - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
