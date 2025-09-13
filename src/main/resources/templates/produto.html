@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Produto Exemplo</title>
+</head>
+<body>
+<h1 th:text="${produto.nome}">Produto Teste</h1>
+<p th:text="${produto.descricao}">Descrição do produto</p>
+<p>Preço: R$ <span th:text="${produto.preco}">100,00</span></p>
+
+<button onclick="abrirChat()">Tenho Interesse</button>
+
+<div id="chat" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px;">
+    <h3>Chat</h3>
+    <div id="mensagens"></div>
+    <input type="text" id="msgInput" placeholder="Digite sua mensagem">
+    <button onclick="enviarMensagem()">Enviar</button>
+</div>
+
+<script>
+    let chatRoomId;
+
+    function abrirChat() {
+        fetch('/chat/start?anuncioId=1&compradorId=2&vendedorId=3', {method:'POST'})
+            .then(res => res.json())
+            .then(data => {
+                chatRoomId = data.id;
+                document.getElementById("chat").style.display = "block";
+                carregarMensagens();
+            });
+    }
+
+    function enviarMensagem() {
+        const content = document.getElementById("msgInput").value;
+        fetch(`/chat/${chatRoomId}/send?senderId=2&content=${content}`, {method:'POST'})
+            .then(() => carregarMensagens());
+    }
+
+    function carregarMensagens() {
+        fetch(`/chat/${chatRoomId}/messages`)
+            .then(res => res.json())
+            .then(msgs => {
+                const div = document.getElementById("mensagens");
+                div.innerHTML = "";
+                msgs.forEach(m => {
+                    div.innerHTML += `<p><b>${m.senderId}:</b> ${m.content}</p>`;
+                });
+            });
+    }
+</script>
+</body>
+</html>
