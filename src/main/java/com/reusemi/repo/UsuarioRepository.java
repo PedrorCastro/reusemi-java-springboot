@@ -9,11 +9,12 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
     boolean existsByEmail(String email);
-    
+
     // Métodos para estatísticas
     long countByAtivoTrue();
-    
+
     // Método para contar usuários criados após uma data
+    // CORRIGIDO: Mudar "User" para "Usuario" na query
     @Query("SELECT COUNT(u) FROM Usuario u WHERE u.dataCriacao >= :data")
     long countByDataCriacaoAfter(LocalDateTime data);
 }

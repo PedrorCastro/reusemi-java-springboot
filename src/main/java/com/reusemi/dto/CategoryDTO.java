@@ -4,16 +4,14 @@ public class CategoryDTO {
     private Long id;
     private String name;
     private String description;
-    private String imageUrl;
 
     // Construtores
     public CategoryDTO() {}
 
-    public CategoryDTO(Long id, String name, String description, String imageUrl) {
+    public CategoryDTO(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
     }
 
     // Getters e Setters
@@ -25,7 +23,4 @@ public class CategoryDTO {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

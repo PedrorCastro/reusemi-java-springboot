@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-
     // Produtos
     List<ProductDTO> getAllProducts();
     Optional<ProductDTO> getProductById(Long id);
