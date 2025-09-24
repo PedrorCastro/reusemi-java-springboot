@@ -1,170 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - REUSEMI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Poppins:wght@600..800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Login/Cadastro - Reusemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../static/img/web/favicon-32x32.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Navbar Premium -->
-    <header class="navbar navbar-expand-lg">
-      <div class="container">
-          <a th:href="@{/}" class="navbar-brand">
-              <span class="logo-icon">♻️</span>
-              <span th:href="@{/}">REUSEMI</span>
-          </a>
+    <header>
+        <div class="header-esquerda">
+            <img class="logo" src="../static/img/web/logo.jpeg" alt="logo">
+            <form action="/buscar" method="GET">
+                <button class="buscar" type="submit">Buscar</button>
+                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">        
+            </form>
+        </div>
 
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <i class="bi bi-list"></i>
-          </button>
-
-          <nav class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav ms-auto">
-                  <li class="nav-item">
-                      <a th:href="@{/}" class="nav-link active">
-                          <i class="bi bi-house-door"></i> Início
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a th:href="@{/categorias}" class="nav-link">
-                          <i class="bi bi-tags"></i> Categorias
-                      </a>
-                  </li>
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                          <i class="bi bi-person-circle"></i> Minha Conta
-                      </a>
-                      <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{/perfil}">Meu Perfil</a></li>
-                          <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
-                          <li><a class="dropdown-item text-warning" th:href="@{/admin}">Área Admin</a></li>
-                      </ul>
-                  </li>
-                  <li class="nav-item">
-                      <a th:href="@{/login}" class="nav-link">
-                          <i class="bi bi-box-arrow-in-right"></i> Entrar
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a th:href="@{/cadastro}" class="nav-link btn btn-outline-primary ms-2">
-                          <i class="bi bi-person-plus"></i> Cadastrar
-                      </a>
-                  </li>
-              </ul>
-          </nav>
-      </div>
+        <div class="header-group-links">
+            <nav>
+                <a class="header-link" href="index.html" >Início</a>
+                <a class="header-link" href="#">Meus anúncios</a>
+                <a class="header-link" href="#">Categorias</a>
+                <a class="header-link" href="login.html" style="color: #6bb422;">Login</a>
+            </nav>
+            <a class="header-special" href="#">Anuncie Grátis</a>
+        </div>
     </header>
-    
-    <section class="login-section py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
-                    <div class="card shadow">
-                        <div class="card-body p-4 p-md-5">
-                            <h2 class="text-center mb-4">Login</h2>
-                            <p>Acesse sua conta para começar a trocar</p>
-                            
-                            <!-- Mensagens de erro/sucesso do Spring Security -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                <i class="bi bi-exclamation-triangle"></i> Email ou senha inválidos!
-                            </div>
-                            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                <i class="bi bi-check-circle"></i> Você saiu com sucesso!
-                            </div>
-                            
-                            <!-- FORMULÁRIO CORRIGIDO -->
-                            <form th:action="@{/login}" method="post">
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="username" name="username" required>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                </div>
-                                
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
-                                    <label class="form-check-label" for="remember-me">Lembrar de mim</label>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-box-arrow-in-right"></i> Entrar
-                                </button>
-                                
-                                <div class="text-center mt-3">
-                                    <a th:href="@{/cadastro}" class="text-decoration-none">
-                                        Não tem conta? Cadastre-se
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>  
-    
-    <!-- Footer Premium -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="footer-brand">
-                        <span class="logo-icon">♻️</span>
-                        <span class="fw-bold">REUSEMI</span>
-                    </div>
-                    <p class="mt-3">Promovendo trocas sustentáveis e consumo consciente desde 2025.</p>
-                    <div class="social-links mt-4">
-                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h5 class="footer-title">Links Rápidos</h5>
-                    <ul class="footer-links">
-                        <li><a th:href="@{/categorias}">Categorias</a></li>
-                        <li><a th:href="@{/como-funciona}">Como funciona</a></li>
-                        <li><a href="#">Termos de uso</a></li>
-                        <li><a href="#">Política de privacidade</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Contato</h5>
-                    <ul class="footer-contact">
-                        <li><i class="bi bi-envelope"></i> contato@reusemi.com</li>
-                        <li><i class="bi bi-whatsapp"></i> (11) 98765-4321</li>
-                        <li><i class="bi bi-geo-alt"></i> São José dos Campos, São Paulo, Brasil</li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-4 mb-4">
-                    <h5 class="footer-title">Newsletter</h5>
-                    <p>Assine para receber dicas de consumo sustentável.</p>
-                    <form class="newsletter-form">
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Seu email">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="bi bi-send"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <hr class="footer-divider">
-            <div class="footer-bottom">
-                <p class="mb-0">&copy; 2025 REUSEMI. Todos os direitos reservados.</p>  
-            </div>
-        </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="linha-fina"></div>
+
+    <div class="login-container">
+        <div class="login-banner">
+            <h2>Faça parte da comunidade sustentável!</h2>
+            <p>Junte-se a milhares de pessoas que estão economizando, ajudando o planeta e dando nova vida a produtos usados.</p>
+            <div class="banner-icons">
+                <div class="banner-icon">
+                    <i class="fas fa-recycle"></i>
+                    <span>Sustentabilidade</span>
+                </div>
+                <div class="banner-icon">
+                    <i class="fas fa-handshake"></i>
+                    <span>Trocas Seguras</span>
+                </div>
+                <div class="banner-icon">
+                    <i class="fas fa-leaf"></i>
+                    <span>Impacto Verde</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-form-container">
+            <div class="login-form">
+                <h2>Entre na sua conta</h2>
+                <p>Digite suas informações para acessar sua conta</p>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Lembrar-me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                    </div>
+                    
+                    <button type="submit" class="login-button">Entrar</button>
+                </form>
+                
+                <div class="divider">
+                    <span>Ou entre com</span>
+                </div>
+                
+                <div class="social-login">
+                    <div class="social-button">
+                        <i class="fab fa-google" style="color: #DB4437;"></i>
+                    </div>
+                    <div class="social-button">
+                        <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
+                    </div>
+                    <div class="social-button">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                </div>
+                
+                <div class="signup-link">
+                    Não tem uma conta? <a href="#" id="signup-link">Cadastre-se agora</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
