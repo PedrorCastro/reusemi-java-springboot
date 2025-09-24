@@ -1,80 +1,92 @@
 package com.reusemi.controller;
 
-import com.reusemi.service.ProductService;
-import com.reusemi.dto.ProductDTO;
-import com.reusemi.dto.CategoryDTO;
+import com.reusemi.entity.Product;
+import com.reusemi.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
-import java.util.Optional;
-import java.util.Map;
+import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/products")
-@CrossOrigin(origins = "*")
+@Controller
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
 
+    // Página principal de produtos
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public String listProducts(Model model) {
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        return "products";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        Optional<ProductDTO> product = productService.getProductById(id);
-        return product.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Formulário para adicionar produto
+    @GetMapping("/new")
+    public String showProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "product-form";
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String category) {
-        return ResponseEntity.ok(productService.getProductsByCategory(category));
+    // Salvar produto
+    @PostMapping("/save")
+    public String saveProduct(@ModelAttribute Product product,
+                              @RequestParam("imageFile") MultipartFile imageFile) {
+        try {
+            // Upload da imagem
+            if (!imageFile.isEmpty()) {
+                String imageName = uploadImageFile(imageFile); // Mudei o nome do método
+                product.setImageUrl(imageName);
+            }
+
+            productRepository.save(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/products";
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String q) {
-        return ResponseEntity.ok(productService.searchProducts(q));
+    // Upload de imagem (endpoint público)
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String fileName = uploadImageFile(file); // Reutiliza o método interno
+            return ResponseEntity.ok(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro no upload: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/featured")
-    public ResponseEntity<List<ProductDTO>> getFeaturedProducts() {
-        return ResponseEntity.ok(productService.getFeaturedProducts());
+    // Método PRIVADO para upload (auxiliar interno) - Mudei o nome
+    private String uploadImageFile(MultipartFile file) throws Exception {
+        // Criar diretório se não existir
+        File uploadDir = new File("uploads");
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        // Gerar nome único
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        File dest = new File(uploadDir.getAbsolutePath() + File.separator + fileName);
+        file.transferTo(dest);
+
+        return fileName;
     }
 
-    @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-        return ResponseEntity.ok(productService.getAllCategories());
-    }
-
-    @GetMapping("/categories/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
-        Optional<CategoryDTO> category = productService.getCategoryById(id);
-        return category.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/categories/{id}/products")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategoryId(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductsByCategoryId(id));
-    }
-
-    @GetMapping("/discounted")
-    public ResponseEntity<List<ProductDTO>> getDiscountedProducts() {
-        return ResponseEntity.ok(productService.getDiscountedProducts());
-    }
-
-    @GetMapping("/status")
-    public ResponseEntity<Map<String, Object>> getServiceStatus() {
-        // Se você implementar o método getServiceStatus() no service
-        return ResponseEntity.ok(Map.of(
-                "status", "online",
-                "mode", "autonomous",
-                "message", "Serviço funcionando independente de banco de dados"
-        ));
+    // Método para deletar produto (opcional)
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
+        return "redirect:/products";
     }
 }

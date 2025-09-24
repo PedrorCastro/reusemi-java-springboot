@@ -1,19 +1,19 @@
 CREATE DATABASE IF NOT EXISTS reusemi_db;
 USE reusemi_db;
 
--- Tabela de usuários
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS usuario (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    senha VARCHAR(255) NOT NULL,
+    nome VARCHAR(100),
+    nivel VARCHAR(20) DEFAULT 'USER',
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Inserir usuário de exemplo
-INSERT IGNORE INTO user (username, email, password, first_name, last_name)
-VALUES ('admin', 'admin@reusemi.com', 'temp_password', 'Admin', 'User');
+-- Senhas BCrypt válidas para "123456"
+INSERT IGNORE INTO usuario (email, senha, nome, nivel) VALUES
+('admin@reusemi.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Admin User', 'ADMIN'),
+('teste@teste.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Usuário Teste', 'USER'),
+('user@user.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Usuário Comum', 'USER');

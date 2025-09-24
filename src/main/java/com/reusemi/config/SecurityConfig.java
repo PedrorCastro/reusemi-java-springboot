@@ -19,29 +19,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/home", "/index", "/inicio").permitAll()
-                .requestMatchers("/login", "/cadastro", "/register", "/sobre", "/como-funciona").permitAll()
-                .requestMatchers("/favicon.ico", "/trocas_sustentaveis.png").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**").permitAll()
-                .requestMatchers("/admin/**", "/exportar-usuarios").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/perfil", true)
-                .failureUrl("/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .deleteCookies("JSESSIONID")
-                .permitAll()
-            )
-            .rememberMe(rm -> rm.key("REUSEMI_REMEMBER_ME_KEY"));
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/home", "/index", "/inicio").permitAll()
+                        .requestMatchers("/login", "/cadastro", "/register", "/sobre", "/como-funciona").permitAll()
+                        .requestMatchers("/favicon.ico", "/trocas_sustentaveis.png").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**").permitAll()
+
+                        .requestMatchers("/products", "/products/**", "/product/**").permitAll()
+
+                        .requestMatchers("/admin/**", "/exportar-usuarios").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/perfil", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
+                .rememberMe(rm -> rm.key("REUSEMI_REMEMBER_ME_KEY"));
 
         return http.build();
     }
