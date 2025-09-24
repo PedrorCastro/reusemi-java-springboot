@@ -5,100 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login/Cadastro - Reusemi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/login.css">
-    <link rel="shortcut icon" href="../static/img/web/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{css/login.css}">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="header-esquerda">
-            <img class="logo" th:src="@{../static/img/web/logo.jpeg}" alt="logo">
-            <form action="/buscar" method="GET">
-                <button class="buscar" type="submit">Buscar</button>
-                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">        
-            </form>
-        </div>
+<header>
+    <div class="header-esquerda">
+        <img class="logo" th:src="@{../static/img/web/logo.png}" alt="logo">
+        <form action="/buscar" method="GET">
+            <button class="buscar" type="submit">Buscar</button>
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+        </form>
+    </div>
 
-        <div class="header-group-links">
-            <nav>
-                <a class="header-link" href="index.html" >Início</a>
-                <a class="header-link" href="#">Meus anúncios</a>
-                <a class="header-link" href="#">Categorias</a>
-                <a class="header-link" href="login.html" style="color: #6bb422;">Login</a>
-            </nav>
-            <a class="header-special" href="#">Anuncie Grátis</a>
-        </div>
-    </header>
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link" th:href="@{/}" >Início</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" th:href="@{/login}" style="color: #6bb422;">Login</a>
+        </nav>
+        <a class="header-special" href="#">Anuncie Grátis</a>
+    </div>
+</header>
 
-    <div class="linha-fina"></div>
+<div class="linha-fina"></div>
 
-    <div class="login-container">
-        <div class="login-banner">
-            <h2>Faça parte da comunidade sustentável!</h2>
-            <p>Junte-se a milhares de pessoas que estão economizando, ajudando o planeta e dando nova vida a produtos usados.</p>
-            <div class="banner-icons">
-                <div class="banner-icon">
-                    <i class="fas fa-recycle"></i>
-                    <span>Sustentabilidade</span>
-                </div>
-                <div class="banner-icon">
-                    <i class="fas fa-handshake"></i>
-                    <span>Trocas Seguras</span>
-                </div>
-                <div class="banner-icon">
-                    <i class="fas fa-leaf"></i>
-                    <span>Impacto Verde</span>
-                </div>
+<div class="login-container">
+    <div class="login-banner">
+        <h2>Faça parte da comunidade sustentável!</h2>
+        <p>Junte-se a milhares de pessoas que estão economizando, ajudando o planeta e dando nova vida a produtos usados.</p>
+        <div class="banner-icons">
+            <div class="banner-icon">
+                <i class="fas fa-recycle"></i>
+                <span>Sustentabilidade</span>
             </div>
-        </div>
-        
-        <div class="login-form-container">
-            <div class="login-form">
-                <h2>Entre na sua conta</h2>
-                <p>Digite suas informações para acessar sua conta</p>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" placeholder="Sua senha" required>
-                    </div>
-                    
-                    <div class="form-options">
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember">Lembrar-me</label>
-                        </div>
-                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
-                    </div>
-                    
-                    <button type="submit" class="login-button">Entrar</button>
-                </form>
-                
-                <div class="divider">
-                    <span>Ou entre com</span>
-                </div>
-                
-                <div class="social-login">
-                    <div class="social-button">
-                        <i class="fab fa-google" style="color: #DB4437;"></i>
-                    </div>
-                    <div class="social-button">
-                        <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
-                    </div>
-                    <div class="social-button">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                </div>
-                
-                <div class="signup-link">
-                    Não tem uma conta? <a href="#" id="signup-link">Cadastre-se agora</a>
-                </div>
+            <div class="banner-icon">
+                <i class="fas fa-handshake"></i>
+                <span>Trocas Seguras</span>
+            </div>
+            <div class="banner-icon">
+                <i class="fas fa-leaf"></i>
+                <span>Impacto Verde</span>
             </div>
         </div>
     </div>
+
+    <div class="login-form-container">
+        <div class="login-form">
+            <h2>Entre na sua conta</h2>
+            <p>Digite suas informações para acessar sua conta</p>
+
+            <!-- FORMULÁRIO CORRIGIDO PARA SPRING SECURITY -->
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username">E-mail</label>
+                    <input type="email" id="username" name="username" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="Sua senha" required>
+                </div>
+
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-me" name="remember-me">
+                        <label for="remember-me">Lembrar-me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+
+                <!-- Mensagens de erro/sucesso -->
+                <div th:if="${param.error}" class="alert alert-danger mt-3">
+                    <i class="fas fa-exclamation-circle"></i> E-mail ou senha inválidos!
+                </div>
+
+                <div th:if="${param.logout}" class="alert alert-success mt-3">
+                    <i class="fas fa-check-circle"></i> Você foi desconectado com sucesso!
+                </div>
+
+                <button type="submit" class="login-button">Entrar</button>
+            </form>
+
+            <div class="divider">
+                <span>Ou entre com</span>
+            </div>
+
+            <div class="social-login">
+                <div class="social-button">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                </div>
+                <div class="social-button">
+                    <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
+                </div>
+                <div class="social-button">
+                    <i class="fab fa-apple"></i>
+                </div>
+            </div>
+
+            <div class="signup-link">
+                Não tem uma conta? <a th:href="@{/cadastro}" id="signup-link">Cadastre-se agora</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    console.log("Página de login carregada");
+
+    // Debug do formulário
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const email = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        console.log('Tentando login com:', { email, password });
+    });
+</script>
 </body>
 </html>

@@ -26,7 +26,6 @@ public class SecurityConfig {
                         .requestMatchers("/favicon.ico", "/trocas_sustentaveis.png").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**").permitAll()
 
-                        .requestMatchers("/products", "/products/**", "/product/**").permitAll()
 
                         .requestMatchers("/admin/**", "/exportar-usuarios").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -37,6 +36,18 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/perfil", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
+
+                        .successHandler((request, response, authentication) -> {
+                            System.out.println("=== LOGIN SUCESSO ===");
+                            System.out.println("Usuário: " + authentication.getName());
+                            response.sendRedirect("/products");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            System.out.println("=== LOGIN FALHOU ===");
+                            System.out.println("Erro: " + exception.getMessage());
+                            response.sendRedirect("/login?error=true");
+                        })
+
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

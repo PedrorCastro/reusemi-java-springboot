@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reusemi</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Reusemi - Trocas Sustentáveis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="shortcut icon" href="../static/css/web/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
 </head>
 <body>
-    <header>
-        <div class="header-esquerda">
-            <img class="logo" src="../uploads/logo.jpeg" alt="logo">
-            <form action="/buscar" method="GET">
-                <button class="buscar" type="submit">Buscar</button>
-                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">        
-            </form>
-        </div>
+<header>
+    <div class="header-esquerda">
+        <img class="logo" th:src="@{/img/web/logo.png}" alt="logo">
+        <form action="/buscar" method="GET">
+            <button class="buscar" type="submit">Buscar</button>
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+        </form>
+    </div>
 
-        <div class="header-group-links">
-            <nav>
-                <a class="header-link" href="#" id="chat-link" >Chat</a>
-                <a class="header-link" href="#">Meus anúncios</a>
-                <a class="header-link" href="#">Categorias</a>
-                <a class="header-link" href="login.html">Login</a>
-            </nav>
-            <a class="header-special" href="#">Anuncie Grátis</a>
-        </div>
-    </header>
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link" th:href="@{/}" >Início</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" th:href="@{/login}">Login</a>
+        </nav>
+        <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
+    </div>
+</header>
 
-    <div class="linha-fina"></div>
-    
-    <div class="categories">
+<div class="linha-fina"></div>
+
+
+<div class="categories">
         <a href="#">Eletrônicos</a>
         <a href="#">Móveis</a>
         <a href="#">Moda</a>
@@ -104,7 +105,7 @@
                     
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="uploads/sofa.jpeg" alt="">
+                            <img th:src="@{../static/img/web/sofa.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Aceito propostas...</div>
@@ -127,7 +128,7 @@
                     <div class="product-card">
                         <div class="product-image">
                             <span class="product-badge">Destaque</span>
-                            <img src="../static/css/web/note.jpeg" alt="">
+                            <img th:src="@{../static/img/web/note.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Busco celular.</div>
@@ -145,7 +146,7 @@
                     <div class="product-grid">
                         <div class="product-card">
                             <div class="product-image">
-                                <img src="../static/css/web/bag.jpeg" alt="">
+                                <img th:src="@{../static/img/web/bag.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Troco por Blusa</div>
@@ -157,7 +158,7 @@
                         <div class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Destaque</span>
-                                <img src="../static/css/web/vaso.jpeg" alt="">
+                                <img th:src="@{../static/img/web/vaso.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Procuro Quadros</div>
@@ -168,7 +169,7 @@
                         
                         <div class="product-card">
                             <div class="product-image">
-                                <img src="../static/css/web/lumi.jpeg" alt="">
+                                <img th:src="@{../static/img/web/lumi.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Busco uma maior!</div>
@@ -180,7 +181,7 @@
                         <div class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Destaque</span>
-                                <img src="../static/css/web/pallet.jpeg" alt="">
+                                <img th:src="@{../static/img/web/pallet.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Analiso propostas</div>
@@ -317,6 +318,6 @@
         </div>
     </footer>
 
-    <script src="../static/js/index.js"></script>
+    <script th:src="@{../static/js/index.js}"></script>
 </body>
 </html>
