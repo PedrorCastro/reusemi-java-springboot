@@ -11,7 +11,7 @@
 <body>
 <header>
     <div class="header-esquerda">
-        <img class="logo" th:src="@{/img/web/logo.png}" alt="logo">
+        <img class="logo" th:src="@{/img/web/logo.jpeg}" alt="logo">
         <form action="/buscar" method="GET">
             <button class="buscar" type="submit">Buscar</button>
             <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
@@ -20,12 +20,26 @@
 
     <div class="header-group-links">
         <nav>
-            <a class="header-link" th:href="@{/}" >Início</a>
+            <a class="header-link" th:href="@{/}">Início</a>
             <a class="header-link" href="#">Meus anúncios</a>
             <a class="header-link" href="#">Categorias</a>
-            <a class="header-link" th:href="@{/login}">Login</a>
+
+            <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
+            <a class="header-link" th:if="${not isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" th:if="${isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
         </nav>
         <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
+
+        <!-- Opcional: Mostrar nome do usuário logado
+        <div th:if="${isAuthenticated}" class="user-info">
+            <span th:text="'Olá, ' + ${username}"></span>
+            <a th:href="@{/logout}" class="logout-link">Sair</a>
+        </div>
+         -->
     </div>
 </header>
 
@@ -94,7 +108,7 @@
                     <div class="product-card">
                         <div class="product-image">
                             <span class="product-badge">Destaque</span>
-                            <img src="../static/img/web/s20.jpeg" alt="">
+                            <img th:src="@{../static/img/web/s20.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Troco por bike</div>

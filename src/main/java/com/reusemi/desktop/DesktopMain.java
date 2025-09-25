@@ -1,13 +1,18 @@
-package com.reusemi;
+package com.reusemi.desktop;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
@@ -18,13 +23,15 @@ public class DesktopMain extends Application {
     private WebEngine webEngine;
     private BorderPane rootLayout;
     private ProgressBar progressBar;
+    private boolean isFullscreen = false;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sistema Reusemi - Desktop");
-        this.primaryStage.setWidth(1200);
-        this.primaryStage.setHeight(800);
+
+        // Configurações para fullscreen
+        setupFullscreen();
 
         initRootLayout();
         initWebView();
@@ -33,11 +40,89 @@ public class DesktopMain extends Application {
         waitForSpringBoot();
     }
 
+    private void setupFullscreen() {
+        // Obtém as dimensões da tela
+        Screen screen = Screen.getPrimary();
+        javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+
+        // Configura a janela para ocupar toda a tela
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+
+        // Habilita fullscreen
+        primaryStage.setMaximized(true);
+        primaryStage.setFullScreen(true);
+        isFullscreen = true;
+
+        // Listener para eventos de fullscreen
+        primaryStage.fullScreenProperty().addListener((obs, oldVal, newVal) -> {
+            isFullscreen = newVal;
+            if (webEngine != null) {
+                // Notifica a página web sobre a mudança de estado
+                Platform.runLater(() -> {
+                    webEngine.executeScript("if(window.onFullscreenChange) window.onFullscreenChange(" + newVal + ")");
+                });
+            }
+        });
+    }
+
+    private void setupKeyboardShortcuts(Scene scene) {
+        // F11 - Alternar fullscreen
+        KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
+        scene.getAccelerators().put(f11, this::toggleFullscreen);
+
+        // ESC - Sair do fullscreen (comportamento padrão)
+        KeyCombination esc = new KeyCodeCombination(KeyCode.ESCAPE);
+        scene.getAccelerators().put(esc, () -> {
+            if (isFullscreen) {
+                primaryStage.setFullScreen(false);
+                isFullscreen = false;
+            }
+        });
+
+        // Ctrl+Q - Sair da aplicação
+        KeyCombination ctrlQ = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlQ, this::exitApplication);
+    }
+
+    private void toggleFullscreen() {
+        isFullscreen = !isFullscreen;
+        primaryStage.setFullScreen(isFullscreen);
+
+        if (!isFullscreen) {
+            // Quando sai do fullscreen, mantém maximizado
+            primaryStage.setMaximized(true);
+        }
+    }
+
     private void initRootLayout() {
         rootLayout = new BorderPane();
 
-        // Barra de ferramentas
+        // Barra de ferramentas (opcional - pode ser escondida em fullscreen)
+        ToolBar toolBar = createToolBar();
+        rootLayout.setTop(toolBar);
+
+        Scene scene = new Scene(rootLayout);
+
+        // Configura os atalhos após a cena ser criada
+        setupKeyboardShortcuts(scene);
+
+        // Configurações da cena para melhor experiência fullscreen
+        try {
+            scene.getStylesheets().add(getClass().getResource("/styles/desktop.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Arquivo CSS não encontrado, usando estilos padrão.");
+        }
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private ToolBar createToolBar() {
         ToolBar toolBar = new ToolBar();
+        toolBar.setId("main-toolbar");
 
         Button backButton = new Button("←");
         backButton.setOnAction(e -> {
@@ -63,23 +148,49 @@ public class DesktopMain extends Application {
         Button homeButton = new Button("🏠");
         homeButton.setOnAction(e -> loadSpringBootApp());
 
+        // Botão fullscreen
+        Button fullscreenButton = new Button("⛶");
+        fullscreenButton.setTooltip(new Tooltip("Alternar Tela Cheia (F11)"));
+        fullscreenButton.setOnAction(e -> toggleFullscreen());
+
         // Barra de progresso
         progressBar = new ProgressBar();
         progressBar.setPrefWidth(200);
         progressBar.setVisible(false);
 
-        toolBar.getItems().addAll(backButton, forwardButton, refreshButton, homeButton, progressBar);
-        rootLayout.setTop(toolBar);
+        // Botão para mostrar/esconder toolbar
+        Button toggleToolbarButton = new Button("☰");
+        toggleToolbarButton.setTooltip(new Tooltip("Mostrar/Esconder Barra de Ferramentas"));
+        toggleToolbarButton.setOnAction(e -> {
+            Node topNode = rootLayout.getTop();
+            if (topNode != null && topNode.isVisible()) {
+                topNode.setVisible(false);
+                topNode.setManaged(false);
+            } else {
+                if (topNode != null) {
+                    topNode.setVisible(true);
+                    topNode.setManaged(true);
+                }
+            }
+        });
 
-        Scene scene = new Scene(rootLayout);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        toolBar.getItems().addAll(
+                backButton, forwardButton, refreshButton, homeButton,
+                new Separator(), fullscreenButton, toggleToolbarButton,
+                new Separator(), progressBar
+        );
+
+        return toolBar;
     }
 
     private void initWebView() {
         try {
             webView = new WebView();
             webEngine = webView.getEngine();
+
+            // Configurações para melhor experiência fullscreen
+            webView.setContextMenuEnabled(false); // Desabilita menu de contexto
+            webView.setZoom(1.0); // Zoom padrão
 
             // Habilita JavaScript
             webEngine.setJavaScriptEnabled(true);
@@ -100,6 +211,9 @@ public class DesktopMain extends Application {
                         // Injeta objeto Java para comunicação com JavaScript
                         JSObject window = (JSObject) webEngine.executeScript("window");
                         window.setMember("desktopApp", new DesktopAppBridge());
+
+                        // Notifica sobre o estado fullscreen
+                        webEngine.executeScript("if(window.onFullscreenChange) window.onFullscreenChange(" + isFullscreen + ")");
                     }
                 });
             });
@@ -123,7 +237,9 @@ public class DesktopMain extends Application {
 
     private void loadSpringBootApp() {
         try {
-            webEngine.load("http://localhost:8080");
+            if (webEngine != null) {
+                webEngine.load("http://localhost:8080");
+            }
         } catch (Exception e) {
             showLoadingPage();
         }
@@ -184,6 +300,7 @@ public class DesktopMain extends Application {
                     <p>Iniciando servidor Spring Boot... Aguarde alguns instantes.</p>
                     <p>Se esta mensagem persistir, verifique se o servidor está rodando na porta 8080.</p>
                     <button onclick="window.location.reload()">Tentar Novamente</button>
+                    <button onclick="if(window.desktopApp) desktopApp.toggleFullscreen()" style="margin-left: 10px;">⛶ Tela Cheia</button>
                 </div>
                 <script>
                     // Tenta recarregar a cada 3 segundos
@@ -204,7 +321,9 @@ public class DesktopMain extends Application {
             </html>
             """;
 
-        webEngine.loadContent(loadingHtml);
+        if (webEngine != null) {
+            webEngine.loadContent(loadingHtml);
+        }
     }
 
     private void showErrorPage(String message) {
@@ -250,13 +369,15 @@ public class DesktopMain extends Application {
                     <h2>⚠️ Erro no Sistema</h2>
                     <p>%s</p>
                     <button onclick="window.location.reload()">Tentar Novamente</button>
-                    <button onclick="desktopApp.openInBrowser('http://localhost:8080')" style="background: #28a745; margin-left: 10px;">Abrir no Navegador</button>
+                    <button onclick="if(window.desktopApp) desktopApp.openInBrowser('http://localhost:8080')" style="background: #28a745; margin-left: 10px;">Abrir no Navegador</button>
                 </div>
             </body>
             </html>
             """.formatted(message);
 
-        webEngine.loadContent(errorHtml);
+        if (webEngine != null) {
+            webEngine.loadContent(errorHtml);
+        }
     }
 
     private void waitForSpringBoot() {
@@ -266,7 +387,7 @@ public class DesktopMain extends Application {
         // Verifica periodicamente se o Spring Boot está pronto
         new Thread(() -> {
             try {
-                // Aguarda o Spring Boot inicializar (aumentei para 5 segundos)
+                // Aguarda o Spring Boot inicializar
                 Thread.sleep(5000);
 
                 Platform.runLater(() -> {
@@ -303,9 +424,21 @@ public class DesktopMain extends Application {
             }
         }
 
-        public String getAppVersion() {
-            return "Reusemi Desktop 1.0";
+        public void toggleFullscreen() {
+            Platform.runLater(() -> toggleFullscreen());
         }
+
+        public boolean isFullscreen() {
+            return isFullscreen;
+        }
+
+        public String getAppVersion() {
+            return "Reusemi Desktop 1.0 - Fullscreen";
+        }
+    }
+
+    private void exitApplication() {
+        Platform.exit();
     }
 
     private void showError(String message) {

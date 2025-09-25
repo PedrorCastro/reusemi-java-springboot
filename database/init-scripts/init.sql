@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 );
 
 -- Senhas BCrypt válidas para "123456"
-INSERT IGNORE INTO usuario (email, senha, nome, nivel) VALUES
-('admin@reusemi.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Admin User', 'ADMIN'),
+INSERT IGNORE INTO usuarios (email, senha, nome, nivel) VALUES
+('admin@reusemi.com', '123456', 'Admin User', 'ADMIN'),
 ('teste@teste.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Usuário Teste', 'USER'),
 ('user@user.com', '$2a$10$7Sz6b5B7O3uV2q1VkQhMz.XpY7h9n8GYM6sJk5c2rLd8nW1zP4QqC', 'Usuário Comum', 'USER');

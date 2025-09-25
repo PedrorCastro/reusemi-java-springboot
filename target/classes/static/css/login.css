@@ -2,13 +2,10 @@
 
         @font-face {
           font-family: 'medium';
-          src: url('fonts/Montserrat/static/Montserrat-Medium.ttf') format('truetype');
+          src: url('/fonts/Montserrat/static/Montserrat-Medium.ttf') format('truetype');
         }
 
-        @font-face {
-            font-family: 'bold';
-            src: url(fonts/Montserrat/static/Montserrat-Bold.ttf);
-        }
+
 
         :root {
           --verde-principal: #0f3600;

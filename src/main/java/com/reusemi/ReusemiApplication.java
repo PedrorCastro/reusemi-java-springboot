@@ -1,22 +1,27 @@
 package com.reusemi;
 
-import com.reusemi.desktop.DesktopService;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
+import com.reusemi.desktop.DesktopMain;
+import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class ReusemiApplication implements CommandLineRunner {
+public class ReusemiApplication {
+
+    private static ConfigurableApplicationContext springContext;
 
     public static void main(String[] args) {
-        // Força modo gráfico
-        System.setProperty("java.awt.headless", "false");
-        SpringApplication.run(ReusemiApplication.class, args);
+        // Inicia o Spring Boot
+        springContext = new SpringApplicationBuilder(ReusemiApplication.class)
+                .headless(false)
+                .run(args);
+
+        // Inicia a aplicação Desktop JavaFX
+        Application.launch(DesktopMain.class, args);
     }
 
-    @Override
-    public void run(String... args) {
-        // Abre a aplicação desktop apontando para a home do Spring
-        new Thread(() -> DesktopService.launchApp("http://localhost:8080/")).start();
+    public static ConfigurableApplicationContext getSpringContext() {
+        return springContext;
     }
 }

@@ -24,7 +24,8 @@ public class SecurityConfig {
                         .requestMatchers("/", "/home", "/index", "/inicio").permitAll()
                         .requestMatchers("/login", "/cadastro", "/register", "/sobre", "/como-funciona").permitAll()
                         .requestMatchers("/favicon.ico", "/trocas_sustentaveis.png").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**","/img/web/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/fonts/**").permitAll()
 
 
                         .requestMatchers("/admin/**", "/exportar-usuarios").hasRole("ADMIN")
@@ -34,6 +35,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/perfil", true)
+                        .defaultSuccessUrl("/?loginSuccess=true", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
 
@@ -51,8 +53,9 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/?logout=true")
                         .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
                         .permitAll()
                 )
                 .rememberMe(rm -> rm.key("REUSEMI_REMEMBER_ME_KEY"));
