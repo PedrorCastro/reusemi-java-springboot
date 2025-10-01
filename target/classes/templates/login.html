@@ -12,21 +12,38 @@
 <body>
 <header>
     <div class="header-esquerda">
-        <img class="logo" th:src="@{../static/img/web/logo.png}" alt="logo">
-        <form action="/buscar" method="GET">
-            <button class="buscar" type="submit">Buscar</button>
-            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
-        </form>
+        <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="search-container">
+            <form action="/buscar" method="GET">
+                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+                <button class="buscar" type="submit">Buscar</button>
+            </form>
+        </div>
     </div>
 
-    <div class="header-group-links">
+    <div class="header-group-links" id="headerLinks">
         <nav>
-            <a class="header-link" th:href="@{/}" >Início</a>
+            <a class="header-link" th:href="@{/}">Início</a>
             <a class="header-link" href="#">Meus anúncios</a>
             <a class="header-link" href="#">Categorias</a>
-            <a class="header-link" th:href="@{/login}" style="color: #6bb422;">Login</a>
+
+            <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
+            <a class="header-link" th:if="${not isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" th:if="${isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
         </nav>
-        <a class="header-special" href="#">Anuncie Grátis</a>
+        <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
     </div>
 </header>
 
@@ -112,7 +129,7 @@
     </div>
 </div>
 
-
+<script th:src="@{../static/js/index.js}"></script>
 <script>
     console.log("Página de login carregada");
 

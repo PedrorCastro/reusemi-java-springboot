@@ -11,14 +11,22 @@
 <body>
 <header>
     <div class="header-esquerda">
-        <img class="logo" th:src="@{/img/web/logo.jpeg}" alt="logo">
+        <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <form action="/buscar" method="GET">
-            <button class="buscar" type="submit">Buscar</button>
             <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+            <button class="buscar" type="submit">Buscar</button>
         </form>
     </div>
 
-    <div class="header-group-links">
+    <div class="header-group-links" id="headerLinks">
         <nav>
             <a class="header-link" th:href="@{/}">Início</a>
             <a class="header-link" href="#">Meus anúncios</a>
@@ -33,13 +41,6 @@
             </a>
         </nav>
         <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
-
-        <!-- Opcional: Mostrar nome do usuário logado
-        <div th:if="${isAuthenticated}" class="user-info">
-            <span th:text="'Olá, ' + ${username}"></span>
-            <a th:href="@{/logout}" class="logout-link">Sair</a>
-        </div>
-         -->
     </div>
 </header>
 
@@ -106,31 +107,35 @@
                 </h2>
                 <div class="product-grid">
                     <div class="product-card">
+                        <a th:href="@{/products/s20}">
                         <div class="product-image">
                             <span class="product-badge">Destaque</span>
-                            <img th:src="@{../static/img/web/s20.jpeg}" alt="">
+                            <img th:src="@{img/web/s20.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Troco por bike</div>
                             <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado de conservação</div>
                             <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
                         </div>
+                        </a>
                     </div>
                     
                     <div class="product-card">
+                        <a th:href="@{/products/sofa}">
                         <div class="product-image">
-                            <img th:src="@{../static/img/web/sofa.jpeg}" alt="">
+                            <img th:src="@{/img/web/sofa.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Aceito propostas...</div>
                             <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
                             <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
                         </div>
+                        </a>
                     </div>
                     
                     <div class="product-card">
                         <div class="product-image">
-                            <img th:src="@{../static/css/web/bike.jpeg}" alt="">
+                            <img th:src="@{images/bike.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Procuro tênis!</div>
@@ -142,7 +147,7 @@
                     <div class="product-card">
                         <div class="product-image">
                             <span class="product-badge">Destaque</span>
-                            <img th:src="@{../static/img/web/note.jpeg}" alt="">
+                            <img th:src="@{img/web/note.jpeg}" alt="">
                         </div>
                         <div class="product-info">
                             <div class="product-price">Busco celular.</div>
@@ -160,7 +165,7 @@
                     <div class="product-grid">
                         <div class="product-card">
                             <div class="product-image">
-                                <img th:src="@{../static/img/web/bag.jpeg}" alt="">
+                                <img th:src="@{img/web/bag.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Troco por Blusa</div>
@@ -172,7 +177,7 @@
                         <div class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Destaque</span>
-                                <img th:src="@{../static/img/web/vaso.jpeg}" alt="">
+                                <img th:src="@{img/web/vaso.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Procuro Quadros</div>
@@ -183,7 +188,7 @@
                         
                         <div class="product-card">
                             <div class="product-image">
-                                <img th:src="@{../static/img/web/lumi.jpeg}" alt="">
+                                <img th:src="@{img/web/lumi.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Busco uma maior!</div>
@@ -195,7 +200,7 @@
                         <div class="product-card">
                             <div class="product-image">
                                 <span class="product-badge">Destaque</span>
-                                <img th:src="@{../static/img/web/pallet.jpeg}" alt="">
+                                <img th:src="@{img/web/pallet.jpeg}" alt="">
                             </div>
                             <div class="product-info">
                                 <div class="product-price">Analiso propostas</div>
@@ -301,7 +306,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>EcoMarket</h3>
+                    <h3>REUSEMI</h3>
                     <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
                 </div>
                 
@@ -333,5 +338,40 @@
     </footer>
 
     <script th:src="@{../static/js/index.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const headerLinks = document.getElementById('headerLinks');
+
+        if (menuToggle && headerLinks) {
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                headerLinks.classList.toggle('active');
+            });
+
+            // Fecha o menu ao clicar em um link (opcional)
+            const headerLinksItems = headerLinks.querySelectorAll('.header-link, .header-special');
+            headerLinksItems.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    headerLinks.classList.remove('active');
+                });
+            });
+
+            // Fecha o menu ao redimensionar a janela para desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    menuToggle.classList.remove('active');
+                    headerLinks.classList.remove('active');
+                    headerLinks.style.display = 'flex';
+                } else {
+                    if (!menuToggle.classList.contains('active')) {
+                        headerLinks.style.display = 'none';
+                    }
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

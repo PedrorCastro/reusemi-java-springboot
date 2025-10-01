@@ -388,7 +388,7 @@ public class DesktopMain extends Application {
         new Thread(() -> {
             try {
                 // Aguarda o Spring Boot inicializar
-                Thread.sleep(5000);
+                Thread.sleep(2500);
 
                 Platform.runLater(() -> {
                     loadSpringBootApp();

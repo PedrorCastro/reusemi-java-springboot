@@ -70,3 +70,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const botaoHamburguer = document.querySelector('.menu-hamburguer');
+    const menuLinks = document.querySelector('#mobile-menu'); // O elemento nav
+
+    if (botaoHamburguer && menuLinks) {
+        botaoHamburguer.addEventListener('click', function() {
+            // Alterna a classe 'is-open' no menu de links
+            menuLinks.classList.toggle('is-open');
+
+            // Alterna o atributo ARIA para acessibilidade
+            const isExpanded = this.getAttribute('aria-expanded') === 'true' || false;
+            this.setAttribute('aria-expanded', !isExpanded);
+        });
+    }
+});
