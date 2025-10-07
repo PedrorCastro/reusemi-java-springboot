@@ -1,6 +1,6 @@
 package com.reusemi.controller;
 
-import com.reusemi.model.Usuario;
+import com.reusemi.entity.Usuario;
 import com.reusemi.repo.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package com.reusemi.controller;
 
-import com.reusemi.model.Usuario;
+import com.reusemi.entity.Usuario;
 import com.reusemi.repo.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,36 +21,60 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model,
+                        @RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "logout", required = false) String logout) {
+
+        if (error != null) {
+            model.addAttribute("error", "Email ou senha inválidos!");
+        }
+        if (logout != null) {
+            model.addAttribute("message", "Você foi desconectado com sucesso!");
+        }
+
         return "login";
     }
 
     @GetMapping("/cadastro")
-    public String cadastro() {
+    public String cadastro(Model model) {
         return "cadastro";
     }
 
-    // ESTE método deve ficar APENAS no AuthController
     @PostMapping("/cadastro")
     public String cadastrarUsuario(@RequestParam String nome,
-                                  @RequestParam String email,
-                                  @RequestParam String senha,
-                                  RedirectAttributes redirectAttributes) {
-        
-        if (usuarioRepository.findByEmail(email).isPresent()) {
-            redirectAttributes.addFlashAttribute("erro", "Email já cadastrado");
+                                   @RequestParam String email,
+                                   @RequestParam String senha,
+                                   RedirectAttributes redirectAttributes) {
+
+        System.out.println("📝 Tentando cadastrar usuário: " + email);
+
+        try {
+            // Verificar se email já existe
+            if (usuarioRepository.findByEmail(email).isPresent()) {
+                redirectAttributes.addFlashAttribute("erro", "Email já cadastrado");
+                return "redirect:/cadastro";
+            }
+
+            // Criar novo usuário
+            Usuario novoUsuario = new Usuario();
+            novoUsuario.setNome(nome);
+            novoUsuario.setEmail(email);
+            novoUsuario.setSenha(passwordEncoder.encode(senha));
+            novoUsuario.setNivel("USER");
+            novoUsuario.setAtivo(true);
+
+            usuarioRepository.save(novoUsuario);
+
+            System.out.println("✅ Usuário cadastrado com sucesso: " + email);
+            redirectAttributes.addFlashAttribute("sucesso", "Cadastro realizado com sucesso! Faça login.");
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            System.out.println("❌ Erro ao cadastrar usuário: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("erro", "Erro ao cadastrar: " + e.getMessage());
             return "redirect:/cadastro";
         }
-        
-        Usuario novoUsuario = new Usuario();
-        novoUsuario.setNome(nome);
-        novoUsuario.setEmail(email);
-        novoUsuario.setSenha(passwordEncoder.encode(senha));
-        novoUsuario.setNivel("USER");
-        
-        usuarioRepository.save(novoUsuario);
-        redirectAttributes.addFlashAttribute("sucesso", "Cadastro realizado com sucesso!");
-        return "redirect:/login";
     }
 
     @GetMapping("/sobre")
@@ -61,5 +85,10 @@ public class AuthController {
     @GetMapping("/como-funciona")
     public String comoFunciona() {
         return "como-funciona";
+    }
+
+    @GetMapping("/acesso-negado")
+    public String acessoNegado() {
+        return "acesso-negado";
     }
 }
