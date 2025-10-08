@@ -51,12 +51,12 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/products", true)
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                         .successHandler((request, response, authentication) -> {
                             System.out.println("✅ LOGIN SUCESSO - Usuário: " + authentication.getName());
-                            response.sendRedirect("/products");
+                            response.sendRedirect("/");
                         })
                         .failureHandler((request, response, exception) -> {
                             System.out.println("❌ LOGIN FALHOU - Usuário: " + request.getParameter("username"));

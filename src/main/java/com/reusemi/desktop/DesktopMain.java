@@ -30,6 +30,7 @@ public class DesktopMain extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sistema Reusemi - Desktop");
 
+
         // Configurações para fullscreen
         setupFullscreen();
 

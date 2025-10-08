@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofá 3 lugares - Reusemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" th:href="@{/images/favicon-32x32.png}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="search-container">
+            <form action="/buscar" method="GET">
+                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+                <button class="buscar" type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="header-group-links" id="headerLinks">
+        <nav>
+            <a class="header-link" th:href="@{/chat}" id="chat-link">Chat</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" th:href="@{#}">Categorias</a>
+            <a class="header-link" th:href="@{/login}">Login</a>
+        </nav>
+        <a class="header-special" th:href="@{/}">Voltar ao Início</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<!-- Conteúdo Principal -->
+<div class="main-content">
+    <div class="product-detail-container" style="width: 100%;">
+        <div class="product-detail" style="display: flex; gap: 40px; background: white; border-radius: 8px; padding: 30px; box-shadow: 2px 6px 9px rgba(0,0,0,0.1);">
+
+            <!-- Galeria de Imagens -->
+            <div class="product-images" style="flex: 1; max-width: 500px;">
+                <div class="main-image" style="margin-bottom: 15px;">
+                    <img th:src="@{/img/web/sofa.jpeg}" alt="Sofá 3 lugares" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px;">
+                </div>
+            </div>
+
+            <!-- Informações do Produto -->
+            <div class="product-info" style="flex: 1;">
+                <span class="product-badge" style="background-color: var(--verde-terciario); color: white; padding: 5px 12px; border-radius: 15px; font-size: 14px; display: inline-block; margin-bottom: 15px;">Venda</span>
+
+                <h1 class="product-title" style="color: var(--verde-principal); font-size: 28px; margin-bottom: 15px; line-height: 1.3;">Sofá 3 lugares em ótimo estado</h1>
+
+                <div class="product-price" style="color: var(--verde-secundario); font-size: 32px; font-weight: bold; margin-bottom: 20px;">R$ 800,00</div>
+
+                <!-- Metadados do Produto -->
+                <div class="product-meta" style="margin-bottom: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <div class="product-meta-item" style="display: flex; align-items: center; margin-bottom: 8px; color: var(--cinza-claro);">
+                        <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--verde-terciario);"></i>
+                        <span>Rio de Janeiro, RJ</span>
+                    </div>
+                    <div class="product-meta-item" style="display: flex; align-items: center; margin-bottom: 8px; color: var(--cinza-claro);">
+                        <i class="fas fa-eye" style="margin-right: 10px; color: var(--verde-terciario);"></i>
+                        <span>189 visualizações</span>
+                    </div>
+                    <div class="product-meta-item" style="display: flex; align-items: center; color: var(--cinza-claro);">
+                        <i class="fas fa-calendar" style="margin-right: 10px; color: var(--verde-terciario);"></i>
+                        <span>Publicado há 5 dias</span>
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div class="product-description" style="margin-bottom: 30px;">
+                    <p style="color: var(--cinza); line-height: 1.6; margin-bottom: 15px;">Sofá 3 lugares em ótimo estado de conservação, quase novo. Estofado em tecido antimanchas de alta qualidade, cor cinza. Estrutura em madeira maciça, muito resistente.</p>
+                    <p style="color: var(--verde-escuro); font-weight: bold; margin-bottom: 10px;">Características:</p>
+                    <ul style="color: var(--cinza); line-height: 1.6; margin-bottom: 15px; padding-left: 20px;">
+                        <li>Dimensões: 2.10m x 0.90m x 0.85m</li>
+                        <li>Tecido antimanchas e antialérgico</li>
+                        <li>Almofadas removíveis para lavagem</li>
+                        <li>Pés em madeira escura</li>
+                        <li>Pouco uso - comprado há 6 meses</li>
+                    </ul>
+                    <p style="color: var(--cinza); line-height: 1.6;">Aceito propostas e possibilidade de parcelamento. Entre em contato para negociar!</p>
+                </div>
+
+                <!-- Informações do Vendedor -->
+                <div class="seller-info" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <div class="seller-header" style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div class="seller-avatar" style="width: 50px; height: 50px; background: var(--verde-terciario); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                            <i class="fas fa-user" style="color: white; font-size: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="seller-name" style="color: var(--verde-principal); font-weight: bold; font-size: 18px;">Ana Oliveira</div>
+                            <div class="seller-rating" style="color: #ffc107;">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span style="color: var(--cinza-claro); margin-left: 5px;">(5.0)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--cinza-claro); margin-bottom: 15px; font-size: 14px;">Membro desde 2022 | 8 anúncios ativos</p>
+                    <div class="product-meta-item" style="display: flex; align-items: center; margin-bottom: 8px; color: var(--cinza-claro);">
+                        <i class="fas fa-phone" style="margin-right: 10px; color: var(--verde-terciario);"></i>
+                        <span>(21) 99876-5432</span>
+                    </div>
+                    <div class="product-meta-item" style="display: flex; align-items: center; color: var(--cinza-claro);">
+                        <i class="fas fa-envelope" style="margin-right: 10px; color: var(--verde-terciario);"></i>
+                        <span>ana.oliveira@email.com</span>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="action-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn-primary" style="background: var(--verde-terciario); color: white; border: none; padding: 15px 25px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; flex: 1; min-width: 200px; transition: background-color 0.3s;">
+                        <i class="fas fa-comments"></i>
+                        Iniciar Conversa
+                    </button>
+                    <button class="btn-secondary favorite-btn" style="background: white; color: var(--cinza-claro); border: 1px solid #ddd; padding: 15px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+                        <i class="fas fa-heart"></i>
+                        Favoritar
+                    </button>
+                    <button class="btn-secondary" style="background: white; color: var(--cinza-claro); border: 1px solid #ddd; padding: 15px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+                        <i class="fas fa-share"></i>
+                        Compartilhar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Reusemi</h3>
+                <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Como vender</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a href="#">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2025 REUSEMI - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Menu Hamburguer
+        const menuToggle = document.getElementById('menuToggle');
+        const headerLinks = document.getElementById('headerLinks');
+
+        if (menuToggle && headerLinks) {
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                headerLinks.classList.toggle('active');
+            });
+        }
+
+        // Navegação entre miniaturas de imagens
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const mainImage = document.querySelector('.main-image img');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // Remove classe active de todas as miniaturas
+                thumbnails.forEach(t => {
+                    t.style.border = '2px solid transparent';
+                });
+                // Adiciona borda na miniatura clicada
+                this.style.border = '2px solid var(--verde-terciario)';
+                // Atualiza imagem principal
+                const thumbImg = this.querySelector('img');
+                if (thumbImg && mainImage) {
+                    mainImage.src = thumbImg.src;
+                }
+            });
+        });
+
+        // Sistema de Favoritos
+        const favoriteBtn = document.querySelector('.favorite-btn');
+        if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', function() {
+                const isFavorited = this.classList.contains('favorited');
+
+                if (isFavorited) {
+                    this.classList.remove('favorited');
+                    this.innerHTML = '<i class="fas fa-heart"></i> Favoritar';
+                    this.style.color = 'var(--cinza-claro)';
+                    this.style.borderColor = '#ddd';
+                } else {
+                    this.classList.add('favorited');
+                    this.innerHTML = '<i class="fas fa-heart" style="color: red;"></i> Favoritado';
+                    this.style.color = 'red';
+                    this.style.borderColor = 'red';
+                }
+            });
+        }
+
+        // Efeitos hover nos botões
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                if (this.classList.contains('btn-primary')) {
+                    this.style.backgroundColor = 'rgb(108, 202, 13)';
+                } else if (this.classList.contains('btn-secondary') && !this.classList.contains('favorited')) {
+                    this.style.backgroundColor = '#f8f9fa';
+                }
+            });
+
+            button.addEventListener('mouseleave', function() {
+                if (this.classList.contains('btn-primary')) {
+                    this.style.backgroundColor = 'var(--verde-terciario)';
+                } else if (this.classList.contains('btn-secondary') && !this.classList.contains('favorited')) {
+                    this.style.backgroundColor = 'white';
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
