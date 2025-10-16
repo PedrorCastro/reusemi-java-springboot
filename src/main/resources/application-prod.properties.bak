@@ -1,0 +1,8 @@
+# ===============================
+# Configuração de Produção
+# ===============================
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.thymeleaf.cache=true
+logging.level.com.reusemi=INFO
+logging.level.org.hibernate.SQL=WARN

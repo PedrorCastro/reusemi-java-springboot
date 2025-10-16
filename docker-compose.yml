@@ -1,0 +1,49 @@
+
+services:
+  reusemi-api:
+    build: .
+    container_name: reusemi-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker  # ← USA O PERFIL DOCKER
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - maven-repo:/root/.m2
+    depends_on:
+      reusemi-db:
+        condition: service_healthy
+    networks:
+      - reusemi-network
+
+  reusemi-db:
+    image: mysql:8.0
+    container_name: reusemi-db
+    environment:
+      MYSQL_DATABASE: reusemi_db
+      MYSQL_ROOT_PASSWORD: REUSEMI123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pREUSEMI123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - reusemi-network
+
+volumes:
+  mysql_data:
+  maven-repo:
+
+networks:
+  reusemi-network:
+    driver: bridge
