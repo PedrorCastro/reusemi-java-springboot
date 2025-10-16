@@ -34,9 +34,9 @@
                 <a class="header-link" href="#">Categorias</a>
 
                 <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
-                <a class="header-link" th:if="${not isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                <div th:if="${#authorization.expression('!isAuthenticated()')} " style="color: #6bb422;">
                     Login
-                </a>
+                </div>
                 <a class="header-link" th:if="${isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
                     Meu Perfil
                 </a>

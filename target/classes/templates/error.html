@@ -123,8 +123,8 @@
             </div>
             
             <!-- Debug info (apenas em desenvolvimento) -->
-            <div th:if="${#strings.contains(#httpServletRequest.requestURI, 'localhost') || #strings.contains(#httpServletRequest.requestURI, '127.0.0.1')}" 
-                 class="mt-4 p-3 bg-light rounded">
+              <div th:if="${#httpServletRequest != null and (#strings.contains(#httpServletRequest.requestURI, 'localhost') || #strings.contains(#httpServletRequest.requestURI, '127.0.0.1'))}" class="mt-4 p-3 bg-light rounded">
+
               <h6 class="text-muted">Informações de Debug (Desenvolvimento):</h6>
               <p class="small mb-1" th:if="${path}"><strong>Path:</strong> <span th:text="${path}"></span></p>
               <p class="small mb-1" th:if="${exception}"><strong>Exceção:</strong> <span th:text="${exception}"></span></p>
