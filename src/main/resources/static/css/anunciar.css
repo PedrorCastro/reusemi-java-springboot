@@ -1,0 +1,419 @@
+@charset "UTF-8";
+
+        @font-face {
+          font-family: 'medium';
+          src: url('/fonts/Montserrat/static/Montserrat-Medium.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'bold';
+            src: url(/fonts/Montserrat/static/Montserrat-Bold.ttf);
+        }
+
+        :root {
+          --verde-principal: #0f3600;
+          --verde-secundario: #1c6400;
+          --verde-terciario: rgb(128, 231, 26);
+          --verde-claro: rgb(156, 255, 57);
+          --verde-escuro: #133d03;
+          --cinza-claro: rgb(78, 78, 78);
+          --cinza: rgb(59, 59, 59);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'medium';
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 130px 20px 130px;
+        }
+
+        .header-esquerda {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-esquerda form {
+            display: flex;
+            gap: 0;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        .logo {
+          width: 40px;
+          max-width: 100%;
+          margin-right: 20px;
+        }
+
+        .pesquisar {
+          padding: 13px 15px;
+          border-radius: 10px 0 0 10px;
+          border: solid rgb(97, 97, 97) 0.5px;
+          width: 250px;
+          max-width: 300px;
+          outline: none;
+          line-height: normal;
+          flex:1;
+          min-width:0;
+        }
+
+        .buscar {
+          color: white;
+          padding: 13px 20px;
+          border-radius: 0 10px 10px 0;
+          background-color: var(--verde-terciario);
+          border: solid rgb(97, 97, 97) 0.5px;
+          border-left: none;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          height: 41px;
+          display: flex;
+          align-items: center;
+          line-height: 1;
+          flex:0 0 auto;
+        }
+
+        .buscar:hover {
+          background-color: rgb(108, 202, 13);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .header-link {
+            text-decoration: none;
+            font-family: 'medium';
+            margin: 10px 15px 0px 15px;
+            color: var(--cinza-claro);
+            transition: color .2s;
+        }
+
+        .header-link:hover {
+            color: #6bb422;
+            transition: color .2s;
+        }
+
+        .header-group-links {
+            display: flex;
+            text-align: center;
+            align-items: center;
+        }
+
+        .header-special {
+            text-decoration: none;
+            background-color: var(--verde-terciario);
+            color: white;
+            margin-left: 15px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: transform, .5s;
+        }
+
+        .header-special:hover {
+            transform: translateY(-5px);
+            background-color: rgb(108, 202, 13);
+        }
+
+        .linha-fina {
+            height: 1px;
+            background-color: #82be27;
+            width: 100%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* Conteúdo principal da página de anúncio */
+        .anuncio-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .anuncio-titulo {
+            color: var(--verde-principal);
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-align: center;
+            font-family: 'bold';
+        }
+
+        .anuncio-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .form-grupo {
+            margin-bottom: 20px;
+        }
+
+        .form-grupo label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--verde-escuro);
+            font-weight: bold;
+        }
+
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-grupo input:focus,
+        .form-grupo select:focus,
+        .form-grupo textarea:focus {
+            border-color: var(--verde-terciario);
+            outline: none;
+        }
+
+        .form-grupo textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--verde-terciario);
+        }
+
+        .upload-area i {
+            font-size: 40px;
+            color: var(--verde-terciario);
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: var(--cinza-claro);
+        }
+
+        #imagens-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .imagem-preview {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .imagem-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remover-imagem {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .remover-imagem:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
+        /* BOTÕES CORRIGIDOS */
+        .botoes-anuncio {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            grid-column: 1 / -1;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancelar {
+            background-color: #f8f9fa;
+            color: var(--cinza);
+            border: 2px solid #dee2e6;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-publicar {
+            background-color: var(--verde-terciario);
+            color: white;
+            border: 2px solid var(--verde-terciario);
+        }
+
+        .btn-publicar:hover {
+            background-color: rgb(108, 202, 13);
+            border-color: rgb(108, 202, 13);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(128, 231, 26, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--verde-escuro);
+            color: white;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color, .3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--verde-claro);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            max-width: 1200px;
+            margin: 20px auto 0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                margin: 20px;
+            }
+
+            .header-esquerda {
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+
+            .pesquisar {
+                width: 200px;
+            }
+
+            .anuncio-form {
+                grid-template-columns: 1fr;
+            }
+
+            .botoes-anuncio {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .anuncio-container {
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .anuncio-titulo {
+                font-size: 28px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+        }

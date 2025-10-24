@@ -1,0 +1,34 @@
+/* Estilos específicos para a tela de cadastro */
+.password-hint {
+    color: var(--cinza-claro);
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+.terms {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+}
+
+.terms input {
+    margin-right: 8px;
+    margin-top: 3px;
+}
+
+.terms-link {
+    color: var(--verde-secundario);
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    .terms {
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  reusemi-api:
+    build: .
+    container_name: reusemi-api-prod
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod,docker  #
+    volumes:
+      - uploads:/app/uploads
+      - logs:/app/logs
+    depends_on:
+      - reusemi-db
+    restart: unless-stopped
+    networks:
+      - reusemi-network
+
+  reusemi-db:
+    image: mysql:8.0
+    container_name: reusemi-db-prod
+    environment:
+      MYSQL_DATABASE: reusemi
+      MYSQL_ROOT_PASSWORD: REUSEMI123
+    volumes:
+      - mysql_data_prod:/var/lib/mysql
+    restart: unless-stopped
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - reusemi-network
+
+volumes:
+  mysql_data_prod:
+  uploads:
+  logs:
+
+networks:
+  reusemi-network:
+    driver: bridge

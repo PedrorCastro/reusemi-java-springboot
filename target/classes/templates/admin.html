@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin - REUSEMI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Poppins:wght@600..800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .admin-section {
+      padding: 2rem 0;
+      min-height: 70vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .admin-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+    
+    .admin-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+    
+    .admin-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .admin-card-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: white;
+    }
+    
+    .admin-card h3 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .admin-card p {
+      color: #7f8c8d;
+      margin-bottom: 1.5rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a th:href="@{/}" class="navbar-brand">
+        <span class="logo-icon">♻️</span>
+        <span>REUSEMI</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <nav class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a th:href="@{/}" class="nav-link">
+              <i class="bi bi-house-door"></i> Início
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/itens}" class="nav-link">
+              <i class="bi bi-tags"></i> Itens
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle"></i> Minha Conta
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" th:href="@{/perfil}">Meu Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/logout}">Sair</a></li>
+              <li><a class="dropdown-item text-warning" th:href="@{/admin}">Área Admin</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <section class="admin-section">
+    <div class="container">
+      <div class="admin-header">
+        <h1><i class="bi bi-shield-lock"></i> Painel Administrativo</h1>
+        <p>Bem-vindo, Administrador</p>
+      </div>
+      
+      <!-- Estatísticas Rápidas -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" th:text="${totalUsuarios}">150</div>
+          <div class="stat-label">Usuários Cadastrados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" th:text="${totalItens}">89</div>
+          <div class="stat-label">Itens Anunciados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" th:text="${trocasRealizadas}">45</div>
+          <div class="stat-label">Trocas Realizadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" th:text="${novosHoje}">3</div>
+          <div class="stat-label">Novos Hoje</div>
+        </div>
+      </div>
+      
+      <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-primary">
+              <i class="bi bi-people"></i>
+            </div>
+            <h3>Gerenciar Usuários</h3>
+            <p>Visualize e gerencie todos os usuários do sistema</p>
+            <a th:href="@{/admin/usuarios}" class="btn btn-outline-primary">
+              Gerenciar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-success">
+              <i class="bi bi-tags"></i>
+            </div>
+            <h3>Gerenciar Itens</h3>
+            <p>Administre todos os itens anunciados na plataforma</p>
+            <a th:href="@{/admin/itens}" class="btn btn-outline-success">
+              Gerenciar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-info">
+              <i class="bi bi-chat-dots"></i>
+            </div>
+            <h3>Moderação</h3>
+            <p>Analise e modere conteúdo reportado pelos usuários</p>
+            <a th:href="@{/admin/moderacao}" class="btn btn-outline-info">
+              Moderar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-warning">
+              <i class="bi bi-bar-chart"></i>
+            </div>
+            <h3>Estatísticas</h3>
+            <p>Acesse relatórios e métricas da plataforma</p>
+            <a th:href="@{/admin/estatisticas}" class="btn btn-outline-warning">
+              Visualizar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-danger">
+              <i class="bi bi-sliders"></i>
+            </div>
+            <h3>Configurações</h3>
+            <p>Configure as opções do sistema e preferências</p>
+            <a th:href="@{/admin/configuracoes}" class="btn btn-outline-danger">
+              Configurar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="admin-card">
+            <div class="admin-card-icon bg-secondary">
+              <i class="bi bi-journal-text"></i>
+            </div>
+            <h3>Relatórios</h3>
+            <p>Gere relatórios detalhados em PDF/Excel</p>
+            <a th:href="@{/admin/relatorios}" class="btn btn-outline-secondary">
+              Gerar <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Ações Rápidas -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-dark text-white">
+              <h5 class="mb-0"><i class="bi bi-lightning"></i> Ações Rápidas</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 mb-2">
+                  <a th:href="@{/admin/usuarios/novo}" class="btn btn-primary w-100">
+                    <i class="bi bi-person-plus"></i> Novo Usuário
+                  </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <a th:href="@{/admin/itens/novo}" class="btn btn-success w-100">
+                    <i class="bi bi-plus-circle"></i> Novo Item
+                  </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <a th:href="@{/admin/backup}" class="btn btn-warning w-100">
+                    <i class="bi bi-database"></i> Backup
+                  </a>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <a th:href="@{/admin/logs}" class="btn btn-info w-100">
+                    <i class="bi bi-list-check"></i> Ver Logs
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer bg-dark text-light mt-5">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="footer-brand">
+            <span class="logo-icon">♻️</span>
+            <span class="fw-bold">REUSEMI</span>
+          </div>
+          <p class="mt-3">Promovendo trocas sustentáveis e consumo consciente desde 2025</p>
+          <div class="social-links mt-4">
+            <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h5 class="footer-title">Links Rápidos</h5>
+          <ul class="footer-links list-unstyled">
+            <li><a th:href="@{/itens}" class="text-light text-decoration-none">Itens</a></li>
+            <li><a th:href="@{/sobre}" class="text-light text-decoration-none">Sobre</a></li>
+            <li><a th:href="@{/como-funciona}" class="text-light text-decoration-none">Como funciona</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-4 mb-4">
+          <h5 class="footer-title">Contato</h5>
+          <ul class="footer-contact list-unstyled">
+            <li><i class="bi bi-envelope"></i> contato@reusemi.com</li>
+            <li><i class="bi bi-whatsapp"></i> (11) 98765-4321</li>
+            <li><i class="bi bi-geo-alt"></i> São José dos Campos, SP</li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-4 mb-4">
+          <h5 class="footer-title">Suporte</h5>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/suporte}" class="text-light text-decoration-none">Central de Ajuda</a></li>
+            <li><a th:href="@{/contato}" class="text-light text-decoration-none">Fale Conosco</a></li>
+            <li><a th:href="@{/politica-privacidade}" class="text-light text-decoration-none">Privacidade</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="footer-bottom text-center">
+        <p class="mb-0">&copy; 2025 REUSEMI. Todos os direitos reservados.</p>  
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fecha o menu mobile ao clicar em um item
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const navbar = document.querySelector('.navbar-collapse');
+        if (navbar.classList.contains('show')) {
+          navbar.classList.remove('show');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

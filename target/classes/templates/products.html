@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anunciar Produto - Reusemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" th:href="@{img/web/favicon-32x32.png}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{css/anunciar.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+        <form action="/buscar" method="GET">
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+            <button class="buscar" type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link" th:href="@{#}" id="chat-link">Chat</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" th:href="@{#}">Categorias</a>
+            <a class="header-link" th:href="@{/login}">Login</a>
+        </nav>
+        <a class="header-special" th:href="@{/}">Voltar ao Início</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<div class="anuncio-container">
+    <h1 class="anuncio-titulo">Anunciar Produto</h1>
+
+    <form th:action="@{/products/save}" method="post" enctype="multipart/form-data" id="form-anuncio" class="anuncio-form">
+        <div class="form-coluna">
+            <div class="form-grupo">
+                <label for="name">Título do anúncio *</label>
+                <input type="text" id="name" name="name" required
+                       placeholder="Ex: Smartphone Samsung Galaxy S20 em ótimo estado">
+            </div>
+
+            <div class="form-grupo">
+                <label for="categoria">Categoria *</label>
+                <select id="categoria" name="categoria" required>
+                    <option value="">Selecione uma categoria</option>
+                    <option value="eletronicos">Eletrônicos</option>
+                    <option value="moveis">Móveis</option>
+                    <option value="moda">Moda</option>
+                    <option value="esportes">Esportes</option>
+                    <option value="veiculos">Veículos</option>
+                    <option value="imoveis">Imóveis</option>
+                    <option value="reciclados">Produtos Reciclados</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="tipo-negociacao">Tipo de negociação *</label>
+                <select id="tipo-negociacao" name="tipo-negociacao" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="troca">Troca</option>
+                    <option value="doacao">Doação</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="valor">Valor desejado *</label>
+                <input type="text" id="valor" name="valor" required
+                       placeholder="Ex: Troco por bicicleta">
+            </div>
+
+            <div class="form-grupo">
+                <label for="condicao">Condição do produto *</label>
+                <select id="condicao" name="condicao" required>
+                    <option value="">Selecione uma opção</option>
+                    <option value="novo">Novo</option>
+                    <option value="usado">Usado</option>
+                    <option value="recondicionado">Recondicionado</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="description">Descrição *</label>
+                <textarea id="description" name="description" required
+                          placeholder="Descreva detalhadamente o produto, incluindo marcas, modelo, estado de conservação, acessórios incluídos, etc."></textarea>
+            </div>
+        </div>
+
+        <div class="form-coluna">
+            <div class="form-grupo">
+                <label>Fotos do produto *</label>
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Clique para adicionar fotos ou arraste e solte</p>
+                    <p><small>Máximo 10 fotos. Formatos: JPG, PNG</small></p>
+                </div>
+                <input type="file" id="imageFile" name="imageFile" multiple accept="image/*" style="display: none;">
+                <div id="imagens-preview"></div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="localizacao">Localização *</label>
+                <input type="text" id="localizacao" name="localizacao" required
+                       placeholder="Ex: São Paulo, SP">
+            </div>
+
+            <div class="form-grupo">
+                <label for="contato">Contato *</label>
+                <input type="text" id="contato" name="contato" required
+                       placeholder="Telefone, WhatsApp ou e-mail">
+            </div>
+
+            <div class="form-grupo">
+                <label for="tags">Tags (opcional)</label>
+                <input type="text" id="tags" name="tags"
+                       placeholder="Ex: smartphone, samsung, eletrônico, usado">
+                <small>Separe as tags por vírgula</small>
+            </div>
+        </div>
+
+        <div class="botoes-anuncio">
+            <a th:href="@{/perfil}" class="btn btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn btn-publicar">Publicar Anúncio</button>
+        </div>
+    </form>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Reusemi</h3>
+                <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Como vender</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a href="#">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2025 REUSEMI - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elementos do formulário
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('imageFile');
+        const imagensPreview = document.getElementById('imagens-preview');
+        const formAnuncio = document.getElementById('form-anuncio');
+
+        // Array para armazenar as imagens
+        let imagensSelecionadas = [];
+
+        // Evento para abrir o seletor de arquivos ao clicar na área de upload
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // Evento para processar arquivos selecionados
+        fileInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                if (imagensSelecionadas.length >= 10) {
+                    alert('Máximo de 10 imagens atingido.');
+                    break;
+                }
+
+                const file = files[i];
+
+                // Verificar se é uma imagem
+                if (!file.type.match('image.*')) {
+                    alert('Por favor, selecione apenas imagens.');
+                    continue;
+                }
+
+                // Adicionar ao array
+                imagensSelecionadas.push(file);
+
+                // Criar preview
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'imagem-preview';
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+
+                    const btnRemover = document.createElement('button');
+                    btnRemover.className = 'remover-imagem';
+                    btnRemover.innerHTML = '×';
+                    btnRemover.type = 'button';
+
+                    // Evento para remover a imagem
+                    btnRemover.addEventListener('click', function() {
+                        const index = Array.from(imagensPreview.children).indexOf(previewDiv);
+                        imagensSelecionadas.splice(index, 1);
+                        previewDiv.remove();
+                    });
+
+                    previewDiv.appendChild(img);
+                    previewDiv.appendChild(btnRemover);
+                    imagensPreview.appendChild(previewDiv);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // Limpar o input para permitir selecionar os mesmos arquivos novamente
+            fileInput.value = '';
+        });
+
+        // Permitir arrastar e soltar imagens
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgb(128, 231, 26)';
+            uploadArea.style.backgroundColor = 'rgba(128, 231, 26, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+
+            const files = e.dataTransfer.files;
+            fileInput.files = files;
+
+            // Disparar evento change manualmente
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        });
+    });
+</script>
+</body>
+</html>

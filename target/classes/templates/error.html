@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erro - REUSEMI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .error-section {
+      padding: 4rem 0;
+      min-height: 60vh;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .error-card {
+      background: white;
+      border-radius: 15px;
+      padding: 3rem;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-top: 5px solid #dc3545;
+    }
+    
+    .error-icon {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 1.5rem;
+    }
+    
+    .error-code {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+    
+    .error-message {
+      color: #6c757d;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a th:href="@{/}" class="navbar-brand">
+        <span class="logo-icon">♻️</span>
+        <span>REUSEMI</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <nav class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a th:href="@{/}" class="nav-link">
+              <i class="bi bi-house-door"></i> Início
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/itens}" class="nav-link">
+              <i class="bi bi-tags"></i> Itens
+            </a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/login}" class="nav-link">
+              <i class="bi bi-box-arrow-in-right"></i> Entrar
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="error-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="error-card">
+            <div class="error-icon">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            
+            <div class="error-code" th:text="${status}">500</div>
+            
+            <h2 th:if="${error}" th:text="${error}">Erro Interno do Servidor</h2>
+            <h2 th:unless="${error}">Oops! Algo deu errado.</h2>
+            
+            <div class="error-message">
+              <p th:if="${message}" th:text="${message}">Desculpe, ocorreu um erro inesperado.</p>
+              <p th:unless="${message}">Desculpe, ocorreu um erro inesperado em nossa aplicação.</p>
+              
+              <p th:if="${timestamp}" class="small text-muted mt-3">
+                Horário do erro: <span th:text="${timestamp}"></span>
+              </p>
+            </div>
+            
+            <div class="action-buttons">
+              <a th:href="@{/}" class="btn btn-primary">
+                <i class="bi bi-house"></i> Página Inicial
+              </a>
+              
+              <a th:href="@{/itens}" class="btn btn-outline-primary">
+                <i class="bi bi-tags"></i> Ver Itens
+              </a>
+              
+              <button onclick="history.back()" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar
+              </button>
+            </div>
+            
+            <!-- Debug info (apenas em desenvolvimento) -->
+              <div th:if="${#httpServletRequest != null and (#strings.contains(#httpServletRequest.requestURI, 'localhost') || #strings.contains(#httpServletRequest.requestURI, '127.0.0.1'))}" class="mt-4 p-3 bg-light rounded">
+
+              <h6 class="text-muted">Informações de Debug (Desenvolvimento):</h6>
+              <p class="small mb-1" th:if="${path}"><strong>Path:</strong> <span th:text="${path}"></span></p>
+              <p class="small mb-1" th:if="${exception}"><strong>Exceção:</strong> <span th:text="${exception}"></span></p>
+              <p class="small mb-0"><strong>URL:</strong> <span th:text="${#httpServletRequest.requestURI}"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>REUSEMI</h5>
+          <p>Promovendo trocas sustentáveis e consumo consciente.</p>
+        </div>
+        <div class="col-md-6 text-end">
+          <p class="mb-0">&copy; 2025 REUSEMI. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

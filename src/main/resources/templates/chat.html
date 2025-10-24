@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reusemi - Chat Interno</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="header-esquerda">
+        <img class="logo" src="img/web/logo.png" alt="logo">
+        <form action="/buscar" method="GET">
+            <button class="buscar" type="submit">Buscar</button>
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+        </form>
+    </div>
+
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link active" href="#">Chat</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" href="#">Login</a>
+        </nav>
+        <a class="header-special" href="#">Anuncie Grátis</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<div class="chat-container">
+    <div class="chat-sidebar">
+        <div class="chat-header">
+            <h2>Conversas</h2>
+            <button class="new-chat-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <div class="chat-search">
+            <input type="text" placeholder="Pesquisar conversas...">
+        </div>
+
+        <div class="conversations-list">
+            <div class="conversation-item active">
+                <img src="https://via.placeholder.com/50" alt="Maria Silva" class="conversation-avatar">
+                <div class="conversation-info">
+                    <div class="conversation-name">Maria Silva</div>
+                    <div class="conversation-preview">Olá, o produto ainda está disponível?</div>
+                </div>
+                <div class="conversation-meta">
+                    <div class="conversation-time">10:25</div>
+                    <div class="unread-count">3</div>
+                </div>
+            </div>
+
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/50" alt="João Santos" class="conversation-avatar">
+                <div class="conversation-info">
+                    <div class="conversation-name">João Santos</div>
+                    <div class="conversation-preview">Podemos negociar o preço?</div>
+                </div>
+                <div class="conversation-meta">
+                    <div class="conversation-time">Ontem</div>
+                </div>
+            </div>
+
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/50" alt="Ana Costa" class="conversation-avatar">
+                <div class="conversation-info">
+                    <div class="conversation-name">Ana Costa</div>
+                    <div class="conversation-preview">Onde podemos nos encontrar?</div>
+                </div>
+                <div class="conversation-meta">
+                    <div class="conversation-time">Seg</div>
+                </div>
+            </div>
+
+            <div class="conversation-item">
+                <img src="https://via.placeholder.com/50" alt="Carlos Oliveira" class="conversation-avatar">
+                <div class="conversation-info">
+                    <div class="conversation-name">Carlos Oliveira</div>
+                    <div class="conversation-preview">Aceita trocar por outro produto?</div>
+                </div>
+                <div class="conversation-meta">
+                    <div class="conversation-time">12/09</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-main">
+        <div class="chat-conversation">
+            <div class="conversation-header">
+                <div class="current-contact">
+                    <img src="https://via.placeholder.com/40" alt="Maria Silva" class="contact-avatar">
+                    <div class="contact-info">
+                        <div class="contact-name">Maria Silva</div>
+                        <div class="contact-status">Online</div>
+                    </div>
+                </div>
+                <div class="conversation-actions">
+                    <button class="action-btn"><i class="fas fa-phone"></i></button>
+                    <button class="action-btn"><i class="fas fa-video"></i></button>
+                    <button class="action-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </div>
+
+            <div class="messages-container">
+                <div class="message received">
+                    <div class="message-content">
+                        <div class="message-text">Olá, o smartphone ainda está disponível?</div>
+                        <div class="message-time">10:20</div>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <div class="message-text">Sim, ainda está disponível! Interessada?</div>
+                        <div class="message-time">10:22</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">
+                        <div class="message-text">Sim, muito! Poderia me enviar mais fotos?</div>
+                        <div class="message-time">10:23</div>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <div class="message-text">Claro, aqui estão algumas fotos adicionais:</div>
+                        <div class="message-time">10:24</div>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <div class="message-images">
+                            <img src="https://via.placeholder.com/100" alt="Foto produto">
+                            <img src="https://via.placeholder.com/100" alt="Foto produto">
+                            <img src="https://via.placeholder.com/100" alt="Foto produto">
+                        </div>
+                        <div class="message-time">10:24</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-input-container">
+                <div class="input-actions">
+                    <button class="action-btn"><i class="fas fa-paperclip"></i></button>
+                    <button class="action-btn"><i class="fas fa-image"></i></button>
+                </div>
+                <input type="text" placeholder="Digite sua mensagem..." class="message-input">
+                <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <div class="chat-details">
+            <div class="details-header">
+                <h3>Detalhes da Conversa</h3>
+            </div>
+
+            <div class="product-info">
+                <h4>Produto em discussão</h4>
+                <div class="product-card-small">
+                    <img src="img/web/s20.jpg" alt="Smartphone Samsung Galaxy S20">
+                    <div class="product-details">
+                        <div class="product-title">Smartphone Samsung Galaxy S20</div>
+                        <div class="product-price">Troco por bike</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-info">
+                <h4>Informações do usuário</h4>
+                <div class="user-details">
+                    <div class="user-stat">
+                        <span class="stat-label">Avaliação:</span>
+                        <span class="stat-value">4.8 ★</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="stat-label">No Reusemi desde:</span>
+                        <span class="stat-value">Jan 2022</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="stat-label">Transações:</span>
+                        <span class="stat-value">24 concluídas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-offer">
+                    <i class="fas fa-handshake"></i> Fazer proposta
+                </button>
+                <button class="btn btn-deal">
+                    <i class="fas fa-check-circle"></i> Fechar negócio
+                </button>
+                <button class="btn btn-report">
+                    <i class="fas fa-flag"></i> Denunciar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Reusemi</h3>
+                <p>O lugar ideal para comprar, vender e trocar produtos usados, contribuindo com o meio ambiente através da reutilização.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Como vender</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a href="#">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2023 Reusemi - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/chat.js"></script>
+</body>
+</html>
