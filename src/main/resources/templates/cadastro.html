@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Reusemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
+    <!--link rel="stylesheet" th:href="@{/css/cad.css}"-->
+</head>
+<body>
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="search-container">
+            <form action="/buscar" method="GET">
+                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+                <button class="buscar" type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="header-group-links" id="headerLinks">
+        <nav>
+            <a class="header-link" th:href="@{/}">Início</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+
+            <!-- CORREÇÃO: Usar sec:authorize em vez de th:if com isAuthenticated -->
+            <a class="header-link" sec:authorize="isAnonymous()" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" sec:authorize="isAuthenticated()" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
+        </nav>
+        <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<div class="login-container">
+    <div class="login-banner">
+        <h2>Faça parte da comunidade sustentável!</h2>
+        <p>Junte-se a milhares de pessoas que estão economizando, ajudando o planeta e dando nova vida a produtos usados.</p>
+        <div class="banner-icons">
+            <div class="banner-icon">
+                <i class="fas fa-recycle"></i>
+                <span>Sustentabilidade</span>
+            </div>
+            <div class="banner-icon">
+                <i class="fas fa-handshake"></i>
+                <span>Trocas Seguras</span>
+            </div>
+            <div class="banner-icon">
+                <i class="fas fa-leaf"></i>
+                <span>Impacto Verde</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-form-container">
+        <div class="login-form">
+            <h2>Crie sua conta</h2>
+            <p>Preencha suas informações para criar uma conta</p>
+
+            <form id="signupForm" th:action="@{/cadastro}" th:object="${usuario}" method="post">
+                <div class="form-group">
+                    <label for="name">Nome completo</label>
+                    <input type="text" id="name" th:field="*{nome}" placeholder="Seu nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" th:field="*{email}" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefone</label>
+                    <input type="tel" id="phone" th:field="*{telefone}" placeholder="(00) 00000-0000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" th:field="*{senha}" placeholder="Sua senha" required>
+                    <small class="password-hint">A senha deve ter pelo menos 8 caracteres, incluindo letras e números</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar senha</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme sua senha" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="terms">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Eu concordo com os <a th:href="@{/termos}" class="terms-link">Termos de Uso</a> e <a th:href="@{/privacidade}" class="terms-link">Política de Privacidade</a></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">Criar conta</button>
+            </form>
+
+            <div class="divider">
+                <span>Ou cadastre-se com</span>
+            </div>
+
+            <div class="social-login">
+                <div class="social-button">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                </div>
+                <div class="social-button">
+                    <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
+                </div>
+                <div class="social-button">
+                    <i class="fab fa-apple"></i>
+                </div>
+            </div>
+
+            <div class="signup-link">
+                Já tem uma conta? <a th:href="@{/login}" id="login-link">Faça login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validação do formulário de cadastro
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const terms = document.getElementById('terms').checked;
+
+        // Validações básicas
+        if (password !== confirmPassword) {
+            alert('As senhas não coincidem!');
+            return;
+        }
+
+        if (password.length < 8) {
+            alert('A senha deve ter pelo menos 8 caracteres!');
+            return;
+        }
+
+        if (!terms) {
+            alert('Você deve aceitar os Termos de Uso e Política de Privacidade!');
+            return;
+        }
+
+        // Se todas as validações passarem, envia o formulário
+        this.submit();
+    });
+
+    // Formatação automática do telefone
+    document.getElementById('phone').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (value.length <= 10) {
+            value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        } else {
+            value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+        }
+
+        e.target.value = value;
+    });
+</script>
+</body>
+</html>

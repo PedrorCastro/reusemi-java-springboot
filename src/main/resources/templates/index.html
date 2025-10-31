@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reusemi - Trocas Sustentáveis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
+</head>
+<body>
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <form action="/buscar" method="GET">
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+            <button class="buscar" type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="header-group-links" id="headerLinks">
+        <nav>
+            <a class="header-link" th:href="@{/}">Início</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+
+            <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
+            <a class="header-link" th:if="${not isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" th:if="${isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
+        </nav>
+        <a class="header-special" th:href="@{/products/}">Anuncie Grátis</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<!-- Categorias Dinâmicas -->
+<div class="categories" th:if="${not categories.empty}">
+    <a th:href="@{/products}" th:each="category : ${categories}">
+        <span th:text="${category.name}"></span>
+    </a>
+</div>
+
+<div class="container">
+    <div class="banner">
+        <h2>Economize e Ajude o Planeta!</h2>
+        <p>Anuncie, negocie e troque produtos usados. Dê uma nova vida para itens que merecem ser reutilizados.</p>
+
+    </div>
+
+    <div class="main-content">
+        <aside class="sidebar">
+            <div class="filters">
+                <h2>Filtros</h2>
+                <div class="filter-group">
+                    <h3>Localização</h3>
+                    <input type="text" placeholder="Digite sua cidade" style="width: 94%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                </div>
+                <div class="filter-group">
+                    <h3>Categoria</h3>
+                    <ul class="filter-options" th:if="${not categories.empty}">
+                        <li th:each="category : ${categories}">
+                            <a th:href="@{/products}">
+                                <span th:text="${category.name}"></span>
+                                <small th:text="'(' + ${category.productCount} + ')'" th:if="${category.productCount != null}"></small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-group">
+                    <h3>Preço</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" placeholder="Mínimo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                        <input type="number" placeholder="Máximo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3>Condição</h3>
+                    <ul class="filter-options">
+                        <li><a href="#">Novo</a></li>
+                        <li><a href="#">Usado</a></li>
+                        <li><a href="#">Recondicionado</a></li>
+                    </ul>
+                </div>
+                <button class="aplicar">Aplicar Filtros</button>
+            </div>
+        </aside>
+
+        <main class="products">
+            <!-- Produtos Recentes -->
+            <h2 class="section-title">
+                Produtos Recentes
+                <a th:href="@{/products}" class="view-all">Ver todos</a>
+            </h2>
+
+            <div class="product-grid" th:if="${not recentProducts.empty}">
+                <div class="product-card" th:each="product : ${recentProducts}">
+                    <a th:href="@{/products/detail/{id}(id=${product.id})}">
+                        <div class="product-image">
+                            <span class="product-badge" th:if="${product.featured}">Destaque</span>
+                            <span class="product-badge discount" th:if="${product.discount > 0}"
+                                  th:text="'-' + ${#numbers.formatDecimal(product.discount, 1, 0, 'POINT')} + '%'">
+                            </span>
+                            <img th:src="${product.imageUrl}"
+                                 th:alt="${product.name}"
+                                 onerror="this.src='/img/web/placeholder.jpg'">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">
+                                <span th:if="${product.discount > 0}" class="original-price"
+                                      th:text="'R$ ' + ${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}">
+                                </span>
+                                <span th:text="'R$ ' + ${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
+
+                            </div>
+                            <div class="product-title" th:text="${product.name}"></div>
+                            <div class="product-description" th:text="${#strings.abbreviate(product.description, 80)}"></div>
+                            <div class="product-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:if="${product.category != null}" th:text="${product.category.name}"></span></span>
+                                <span th:if="${product.categoryName == null}">Categoria não definida</span>
+                            </div>
+                            <div class="product-date">
+                                <small th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy')}"></small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="empty-state" th:if="${recentProducts.empty}">
+                <div class="empty-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h3>Nenhum produto anunciado ainda</h3>
+                <p>Seja o primeiro a anunciar um produto!</p>
+                <a th:href="@{/products}" class="btn-primary">Anunciar Produto</a>
+            </div>
+
+            <!-- Produtos em Destaque -->
+            <div class="featured" th:if="${not featuredProducts.empty}">
+                <h2 class="section-title">
+                    Produtos em Destaque
+                    <a th:href="@{/products}" class="view-all">Ver todos</a>
+                </h2>
+                <div class="product-grid">
+                    <div class="product-card featured-card" th:each="product : ${featuredProducts}">
+                        <a th:href="@{/products/detail/{id}(id=${product.id})}">
+                            <div class="product-image">
+                                <span class="product-badge featured-badge">
+                                    <i class="fas fa-star"></i> Destaque
+                                </span>
+                                <img th:src="${product.imageUrl}"
+                                     th:alt="${product.name}"
+                                     onerror="this.src='/img/web/placeholder.jpg'">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">
+                                    <span th:text="'R$ ' + ${#numbers.formatDecimal(product.finalPrice, 1, 2, 'POINT')}"></span>
+                                </div>
+                                <div class="product-title" th:text="${product.name}"></div>
+                                <div class="product-description" th:text="${#strings.abbreviate(product.description, 60)}"></div>
+                                <div class="product-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span th:if="${product.categoryName != null}" th:text="${product.categoryName}"></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produtos Sustentáveis (Exemplos estáticos) -->
+            <div class="featured">
+                <h2 class="section-title">
+                    Produtos Sustentáveis
+                    <a href="#" class="view-all">Ver todos</a>
+                </h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <a th:href="@{/products/s20}">
+                            <div class="product-image">
+                                <span class="product-badge sustainable">Eco</span>
+                                <img th:src="@{/img/web/s20.jpeg}" alt="Smartphone Samsung">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Troco por bike</div>
+                                <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-card">
+                        <a th:href="@{/products/sofa}">
+                            <div class="product-image">
+                                <span class="product-badge sustainable">Eco</span>
+                                <img th:src="@{/img/web/sofa.jpeg}" alt="Sofá 3 lugares">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Aceito propostas...</div>
+                                <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-card">
+                        <a th:href="@{/products/bicicleta-caloi}">
+                            <div class="product-image">
+                                <span class="product-badge sustainable">Eco</span>
+                                <img th:src="@{/img/web/bike.jpeg}" alt="Bicicleta Caloi">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Procuro tênis!</div>
+                                <div class="product-title">Bicicleta Caloi aro 29, perfeita para exercícios</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="product-card">
+                        <a th:href="@{/products/notebook-dell}">
+                            <div class="product-image">
+                                <span class="product-badge sustainable">Eco</span>
+                                <img th:src="@{/img/web/note.jpeg}" alt="Notebook Dell">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Busco celular.</div>
+                                <div class="product-title">Notebook Dell i7, 16GB RAM, SSD 512GB</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Brasília, DF</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="benefits">
+        <div class="benefit">
+            <i class="fas fa-recycle"></i>
+            <h3>Ajude o Meio Ambiente</h3>
+            <p>Reduza o desperdício dando uma segunda vida aos produtos!</p>
+        </div>
+        <div class="benefit">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>Economize Dinheiro</h3>
+            <p>Troque produtos de qualidade por outros ainda melhores!</p>
+        </div>
+        <div class="benefit">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Trocas Seguras</h3>
+            <p>Conversas protegidas e verificação de vendedores!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Flutuante (opcional) -->
+<div id="chat-window" class="chat-window" style="display: none;">
+    <div class="chat-header">
+        <h3>Chat</h3>
+        <button id="close-chat" class="close-chat"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chat-content">
+        <div class="chat-placeholder">
+            <i class="fas fa-comments"></i>
+            <p>Inicie uma conversa sobre um produto!</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>REUSEMI</h3>
+                <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a th:href="@{/products/new}">Como anunciar</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a th:href="@{/products/new}">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2024 REUSEMI - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const headerLinks = document.getElementById('headerLinks');
+
+        if (menuToggle && headerLinks) {
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                headerLinks.classList.toggle('active');
+            });
+
+            // Fecha o menu ao clicar em um link
+            const headerLinksItems = headerLinks.querySelectorAll('.header-link, .header-special');
+            headerLinksItems.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    headerLinks.classList.remove('active');
+                });
+            });
+
+            // Fecha o menu ao redimensionar a janela para desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    menuToggle.classList.remove('active');
+                    headerLinks.classList.remove('active');
+                }
+            });
+        }
+
+        // Animação para os cards de produtos
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
+</body>
+</html>

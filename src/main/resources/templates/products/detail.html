@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name} + ' - Reusemi'">Detalhes do Produto - Reusemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .product-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .product-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 20px 0;
+        }
+        .product-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #6bb422;
+            margin-bottom: 15px;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+        .discount-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .product-description {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .product-meta {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .meta-item i {
+            width: 20px;
+            margin-right: 10px;
+            color: #6bb422;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn-contact {
+            background: #6bb422;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-contact:hover {
+            background: #5a9c1a;
+        }
+        .btn-favorite {
+            background: #f8f9fa;
+            color: #333;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-favorite:hover {
+            background: #e9ecef;
+        }
+        .seller-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .seller-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6bb422;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .back-button:hover {
+            color: #5a9c1a;
+        }
+        @media (max-width: 768px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .product-title {
+                font-size: 1.5rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <form action="/buscar" method="GET">
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+            <button class="buscar" type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="header-group-links" id="headerLinks">
+        <nav>
+            <a class="header-link" th:href="@{/}">Início</a>
+            <a class="header-link" href="#">Meus anúncios</a>
+            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" th:href="@{/login}" style="color: #6bb422;">Login</a>
+        </nav>
+        <a class="header-special" th:href="@{/products/new}">Anuncie Grátis</a>
+    </div>
+</header>
+
+<div class="linha-fina"></div>
+
+<div class="product-detail-container">
+    <!-- Botão Voltar -->
+    <a th:href="@{/}" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Voltar para a página inicial
+    </a>
+
+    <!-- Detalhes do Produto -->
+    <div class="product-detail">
+        <!-- Imagem do Produto -->
+        <div class="product-image">
+            <img th:src="${product.imageUrl}"
+                 th:alt="${product.name}"
+                 onerror="this.src='https://via.placeholder.com/600x400?text=Imagem+Indisponível'">
+        </div>
+
+        <!-- Informações do Produto -->
+        <div class="product-info">
+            <h1 class="product-title" th:text="${product.name}"></h1>
+
+            <div class="product-price">
+                    <span th:if="${product.discount > 0}" class="discount-price">
+                        R$ <span th:text="${#numbers.formatDecimal(product.getFinalPrice(), 1, 2, 'POINT')}"></span>
+                    </span>
+                <span th:unless="${product.discount > 0}">
+                        R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
+                    </span>
+                <span th:if="${product.discount > 0}" class="original-price">
+                        R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
+                    </span>
+                <span th:if="${product.discount > 0}" class="discount-badge">
+                        <span th:text="'-' + ${#numbers.formatDecimal(product.discount, 1, 0, 'POINT')} + '%'"></span>
+                    </span>
+            </div>
+
+            <div class="product-description" th:text="${product.description}"></div>
+
+            <div class="product-meta">
+                <div class="meta-item">
+                    <i class="fas fa-tag"></i>
+                    <span th:if="${product.category != null}" th:text="${product.category.name}"></span>
+                    <span th:if="${product.category == null}">Categoria não definida</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-star" th:if="${product.featured}"></i>
+                    <i class="far fa-star" th:unless="${product.featured}"></i>
+                    <span th:if="${product.featured}">Produto em destaque</span>
+                    <span th:unless="${product.featured}">Produto comum</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>Anunciado em: </span>
+                    <span th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy')}"></span>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="action-buttons">
+                <a href="#" class="btn-contact">
+                    <i class="fas fa-comments"></i>
+                    Entrar em Contato
+                </a>
+                <button class="btn-favorite">
+                    <i class="far fa-heart"></i>
+                    Favoritar
+                </button>
+            </div>
+
+            <!-- Informações do Vendedor -->
+            <div class="seller-info" th:if="${seller != null}">
+                <h3 class="seller-title">Informações do Vendedor</h3>
+                <div class="meta-item">
+                    <i class="fas fa-user"></i>
+                    <span th:text="${seller.name}"></span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Membro desde: </span>
+                    <span th:text="${seller.memberSince}"></span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Anúncios ativos: </span>
+                    <span th:text="${seller.activeAds}"></span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-star"></i>
+                    <span>Avaliação: </span>
+                    <span th:text="${seller.rating}"></span>/5.0
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-phone"></i>
+                    <span th:text="${seller.phone}"></span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-envelope"></i>
+                    <span th:text="${seller.email}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produtos Relacionados -->
+    <div style="margin-top: 50px;">
+        <h2 style="margin-bottom: 20px;">Produtos Relacionados</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <!-- Aqui você pode adicionar produtos relacionados -->
+            <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
+                <p>Outros produtos da mesma categoria aparecerão aqui</p>
+                <a th:href="@{/products}" class="btn-contact" style="margin-top: 10px;">
+                    Ver Todos os Produtos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>REUSEMI</h3>
+                <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a th:href="@{/products/new}">Como anunciar</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a th:href="@{/products/new}">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2024 REUSEMI - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const headerLinks = document.getElementById('headerLinks');
+
+        if (menuToggle && headerLinks) {
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                headerLinks.classList.toggle('active');
+            });
+        }
+
+        // Botão favoritar
+        const favoriteBtn = document.querySelector('.btn-favorite');
+        if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.innerHTML = '<i class="fas fa-heart"></i> Favoritado';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.innerHTML = '<i class="far fa-heart"></i> Favoritar';
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

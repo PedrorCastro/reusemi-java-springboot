@@ -1,0 +1,40 @@
+﻿# Maven
+target/
+bin/
+!src/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Banco de dados
+*.mv.db
+*.trace.db
+reusemi-db.*
+
+# Uploads temporários
+uploads/
+
+# Arquivos compilados
+*.class
+*.jar
+*.war
+*.ear
+
+# Arquivos de configuração local
+.env
+
+# Eclipse
+.settings/
+.project
+.classpath

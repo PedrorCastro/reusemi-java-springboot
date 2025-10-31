@@ -1,0 +1,45 @@
+﻿services:
+  mysql-reusemi:
+    image: mysql:8.0
+    container_name: mysql-reusemi
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reusemi
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - type: bind
+        source: C:/Users/repre/OneDrive/Documentos/dumps/Dump20251014
+        target: /docker-entrypoint-initdb.d
+    networks:
+      - reusemi-network
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --bind-address=0.0.0.0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      timeout: 120s  # Mais tempo para restaurar backup grande
+      retries: 20
+      start_period: 90s
+
+  reusemi-api:
+    build: .
+    container_name: reusemi-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql-reusemi:
+        condition: service_healthy
+    networks:
+      - reusemi-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  reusemi-network:
+    driver: bridge
