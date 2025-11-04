@@ -1,8 +1,12 @@
 package com.reusemi.controller;
 
+<<<<<<< HEAD
 import com.reusemi.entity.Category;
 import com.reusemi.entity.Product;
 import com.reusemi.repo.CategoryRepository;
+=======
+import com.reusemi.entity.Product;
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 import com.reusemi.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +15,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+<<<<<<< HEAD
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.time.LocalDateTime;
+=======
+
+import java.io.File;
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +45,7 @@ public class ProductController {
     }
 
     // Formulário para adicionar produto
+<<<<<<< HEAD
     // No método showProductForm:
     @GetMapping("/new")
     public String showProductForm(Model model) {
@@ -43,6 +53,14 @@ public class ProductController {
         model.addAttribute("categories", categoryRepository.findByActiveTrueOrderByNameAsc());
         return "product-form";
     }
+=======
+    @GetMapping("/new")
+    public String showProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "product-form";
+    }
+
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     // Salvar produto
     @PostMapping("/save")
     public String saveProduct(@ModelAttribute Product product,
@@ -58,8 +76,12 @@ public class ProductController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
         // Redireciona para a página inicial em vez da lista de produtos
         return "redirect:/";
+=======
+        return "redirect:/products";
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     }
 
     // Upload de imagem (endpoint público)
@@ -156,6 +178,7 @@ public class ProductController {
                 .orElse("redirect:/products");
     }
 
+<<<<<<< HEAD
     @PostMapping("/products/save")
     public String saveProduct(@RequestParam String name,
                               @RequestParam String description,
@@ -192,6 +215,8 @@ public class ProductController {
         }
     }
 
+=======
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     // =========================================================================
     // MÉTODOS AUXILIARES PARA DADOS DE EXEMPLO
     // =========================================================================
@@ -293,9 +318,12 @@ public class ProductController {
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
     }
+<<<<<<< HEAD
 
     @Autowired
     private CategoryRepository categoryRepository;
 
 
+=======
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 }

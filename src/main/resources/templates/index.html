@@ -11,7 +11,11 @@
 <body>
 <header>
     <div class="header-esquerda">
+<<<<<<< HEAD
         <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+=======
+        <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 
         <!-- Botão Hamburguer para Mobile -->
         <button class="menu-toggle" id="menuToggle">
@@ -40,12 +44,17 @@
                 Meu Perfil
             </a>
         </nav>
+<<<<<<< HEAD
         <a class="header-special" th:href="@{/products/}">Anuncie Grátis</a>
+=======
+        <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     </div>
 </header>
 
 <div class="linha-fina"></div>
 
+<<<<<<< HEAD
 <!-- Categorias Dinâmicas -->
 <div class="categories" th:if="${not categories.empty}">
     <a th:href="@{/products}" th:each="category : ${categories}">
@@ -186,11 +195,71 @@
             <div class="featured">
                 <h2 class="section-title">
                     Produtos Sustentáveis
+=======
+
+<div class="categories">
+        <a href="#">Eletrônicos</a>
+        <a href="#">Móveis</a>
+        <a href="#">Moda</a>
+        <a href="#">Esportes</a>
+        <a href="#">Veículos</a>
+        <a href="#">Imóveis</a>
+        <a href="#">Reciclados</a>
+    </div>
+
+    <div class="container">
+        <div class="banner">
+            <h2>Economize e Ajude o Planeta!</h2>
+            <p>Anuncie, negocie e troque produtos usados. Dê uma nova vida para itens que merecem ser reutilizados.</p>
+        </div>
+        
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="filters">
+                    <h2>Filtros</h2>
+                    <div class="filter-group">
+                        <h3>Localização</h3>
+                        <input type="text" placeholder="Digite sua cidade" style="width: 94%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                    </div>
+                    <div class="filter-group">
+                        <h3>Categoria</h3>
+                        <ul class="filter-options">
+                            <li><a href="#">Celulares (125)</a></li>
+                            <li><a href="#">Computadores (78)</a></li>
+                            <li><a href="#">Eletrodomésticos (54)</a></li>
+                            <li><a href="#">Móveis (92)</a></li>
+                            <li><a href="#">Roupas (167)</a></li>
+                        </ul>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Preço</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" placeholder="Mínimo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                            <input type="number" placeholder="Máximo" style="width: 50%; padding: 8px; border: 1px solid #1c640044; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Condição</h3>
+                        <ul class="filter-options">
+                            <li><a href="#">Novo (234)</a></li>
+                            <li><a href="#">Usado (567)</a></li>
+                            <li><a href="#">Recondicionado (89)</a></li>
+                        </ul>
+                    </div>
+                    <button class="aplicar">Aplicar Filtros</button>
+                </div>
+            </aside>
+            
+            <main class="products">
+                <h2 class="section-title">
+                    Anúncios em Destaque
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
                     <a href="#" class="view-all">Ver todos</a>
                 </h2>
                 <div class="product-grid">
                     <div class="product-card">
                         <a th:href="@{/products/s20}">
+<<<<<<< HEAD
                             <div class="product-image">
                                 <span class="product-badge sustainable">Eco</span>
                                 <img th:src="@{/img/web/s20.jpeg}" alt="Smartphone Samsung">
@@ -317,6 +386,238 @@
     </div>
 </footer>
 
+=======
+                        <div class="product-image">
+                            <span class="product-badge">Destaque</span>
+                            <img th:src="@{img/web/s20.jpeg}" alt="">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">Troco por bike</div>
+                            <div class="product-title">Smartphone Samsung Galaxy S20 em ótimo estado de conservação</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</div>
+                        </div>
+                        </a>
+                    </div>
+                    
+                    <div class="product-card">
+                        <a th:href="@{products/sofa}">
+                        <div class="product-image">
+                            <img th:src="@{/img/web/sofa.jpeg}" alt="">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">Aceito propostas...</div>
+                            <div class="product-title">Sofá 3 lugares em ótimo estado, quase novo</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</div>
+                        </div>
+                        </a>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img th:src="@{images/bike.jpeg}" alt="">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">Procuro tênis!</div>
+                            <div class="product-title">Bicicleta Caloi aro 29, perfeito para exercícios</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <div class="product-image">
+                            <span class="product-badge">Destaque</span>
+                            <img th:src="@{img/web/note.jpeg}" alt="">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price">Busco celular.</div>
+                            <div class="product-title">Notebook Dell i7, 16GB RAM, SSD 512GB</div>
+                            <div class="product-location"><i class="fas fa-map-marker-alt"></i> Brasília, DF</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="featured">
+                    <h2 class="section-title">
+                        Produtos Sustentáveis
+                        <a href="#" class="view-all">Ver todos</a>
+                    </h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img th:src="@{img/web/bag.jpeg}" alt="">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Troco por Blusa</div>
+                                <div class="product-title">EcoBag feita de material reciclado, resistente</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Florianópolis, SC</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Destaque</span>
+                                <img th:src="@{img/web/vaso.jpeg}" alt="">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Procuro Quadros</div>
+                                <div class="product-title">Conjunto de vasos de jardim com material reciclado</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Recife, PE</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img th:src="@{img/web/lumi.jpeg}" alt="">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Busco uma maior!</div>
+                                <div class="product-title">Luminária de mesa feita com garrafas pet recicladas</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Manaus, AM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge">Destaque</span>
+                                <img th:src="@{img/web/pallet.jpeg}" alt="">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-price">Analiso propostas</div>
+                                <div class="product-title">Móveis de jardim com pallets reciclados</div>
+                                <div class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <div class="benefits">
+            <div class="benefit">
+                <i class="fas fa-recycle"></i>
+                <h3>Ajude o Meio Ambiente</h3>
+                <p>Reduza o desperdício dando uma segunda vida aos produtos!</p>
+            </div>
+            <div class="benefit">
+                <i class="fas fa-money-bill-wave"></i>
+                <h3>Economize Dinheiro</h3>
+                <p>Troque produtos de qualidade por outros ainda melhores!</p>
+            </div>
+            <div class="benefit">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Trocas Seguras</h3>
+                <p>Conversas protegidas e verificação de vendedores!</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Janela de Chat Flutuante -->
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <h3>Chat</h3>
+            <button id="close-chat" class="close-chat"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-tabs">
+            <button class="tab-button active" data-tab="conversations">Conversas</button>
+            <button class="tab-button" data-tab="contacts">Contatos</button>
+        </div>
+        <div class="chat-content">
+            <div id="conversations-tab" class="tab-content active">
+                <div class="conversation-list">
+                    <div class="conversation-item">
+                        <img src="https://ui-avatars.com/api/?name=João+Silva&background=random" alt="João Silva">
+                        <div class="conversation-info">
+                            <h4>João Silva</h4>
+                            <p>Olá, tenho interesse no seu produto...</p>
+                            <span class="conversation-time">10:30</span>
+                        </div>
+                    </div>
+                    <div class="conversation-item">
+                        <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=random" alt="Maria Santos">
+                        <div class="conversation-info">
+                            <h4>Maria Santos</h4>
+                            <p>Podemos combinar o local?</p>
+                            <span class="conversation-time">Ontem</span>
+                        </div>
+                    </div>
+                    <div class="conversation-item">
+                        <img src="https://ui-avatars.com/api/?name=Carlos+Oliveira&background=random" alt="Carlos Oliveira">
+                        <div class="conversation-info">
+                            <h4>Carlos Oliveira</h4>
+                            <p>Quando posso ver o produto?</p>
+                            <span class="conversation-time">12/05</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="contacts-tab" class="tab-content">
+                <div class="contact-list">
+                    <div class="contact-item">
+                        <img src="https://ui-avatars.com/api/?name=Ana+Costa&background=random" alt="Ana Costa">
+                        <div class="contact-info">
+                            <h4>Ana Costa</h4>
+                            <p>Vendedora de móveis usados</p>
+                        </div>
+                        <button class="message-button"><i class="fas fa-comment"></i></button>
+                    </div>
+                    <div class="contact-item">
+                        <img src="https://ui-avatars.com/api/?name=Pedro+Almeida&background=random" alt="Pedro Almeida">
+                        <div class="contact-info">
+                            <h4>Pedro Almeida</h4>
+                            <p>Interessado em eletrônicos</p>
+                        </div>
+                        <button class="message-button"><i class="fas fa-comment"></i></button>
+                    </div>
+                    <div class="contact-item">
+                        <img src="https://ui-avatars.com/api/?name=Julia+Ferreira&background=random" alt="Julia Ferreira">
+                        <div class="contact-info">
+                            <h4>Julia Ferreira</h4>
+                            <p>Compra e vende roupas</p>
+                        </div>
+                        <button class="message-button"><i class="fas fa-comment"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>REUSEMI</h3>
+                    <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Links Úteis</h3>
+                    <ul>
+                        <li><a href="#">Como vender</a></li>
+                        <li><a href="#">Dicas de segurança</a></li>
+                        <li><a href="#">Perguntas frequentes</a></li>
+                        <li><a href="#">Sustentabilidade</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><a href="#">Fale conosco</a></li>
+                        <li><a href="#">Anuncie</a></li>
+                        <li><a href="#">Trabalhe conosco</a></li>
+                        <li><a href="#">Seja um parceiro</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 REUSEMI - Todos os direitos reservados. ♻️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{../static/js/index.js}"></script>
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.getElementById('menuToggle');
@@ -328,7 +629,11 @@
                 headerLinks.classList.toggle('active');
             });
 
+<<<<<<< HEAD
             // Fecha o menu ao clicar em um link
+=======
+            // Fecha o menu ao clicar em um link (opcional)
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
             const headerLinksItems = headerLinks.querySelectorAll('.header-link, .header-special');
             headerLinksItems.forEach(link => {
                 link.addEventListener('click', function() {
@@ -342,6 +647,7 @@
                 if (window.innerWidth > 768) {
                     menuToggle.classList.remove('active');
                     headerLinks.classList.remove('active');
+<<<<<<< HEAD
                 }
             });
         }
@@ -356,6 +662,16 @@
                 this.style.transform = 'translateY(0)';
             });
         });
+=======
+                    headerLinks.style.display = 'flex';
+                } else {
+                    if (!menuToggle.classList.contains('active')) {
+                        headerLinks.style.display = 'none';
+                    }
+                }
+            });
+        }
+>>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     });
 </script>
 </body>
