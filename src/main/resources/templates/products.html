@@ -1,32 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anunciar Produto - Reusemi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="shortcut icon" th:href="@{img/web/favicon-32x32.png}" type="image/x-icon">
-    <link rel="stylesheet" th:href="@{css/anunciar.css}">
+    <link rel="shortcut icon" href="/img/web/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/anunciar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <header>
     <div class="header-esquerda">
-        <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+        <a href="/"><img class="logo" src="/img/web/logo.png" alt="logo"></a>
+
+        <!-- Botão Hamburguer para Mobile -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <form action="/buscar" method="GET">
             <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
             <button class="buscar" type="submit">Buscar</button>
         </form>
     </div>
 
-    <div class="header-group-links">
+    <div class="header-group-links" id="headerLinks">
         <nav>
-            <a class="header-link" th:href="@{#}" id="chat-link">Chat</a>
-            <a class="header-link" href="#">Meus anúncios</a>
-            <a class="header-link" th:href="@{#}">Categorias</a>
-            <a class="header-link" th:href="@{/login}">Login</a>
+            <a class="header-link" href="/">Início</a>
+            <a class="header-link" href="/perfil">Meus anúncios</a>
         </nav>
-        <a class="header-special" th:href="@{/}">Voltar ao Início</a>
+        <a class="header-special" href="/products">Anuncie Grátis</a>
     </div>
 </header>
 
@@ -35,7 +41,7 @@
 <div class="anuncio-container">
     <h1 class="anuncio-titulo">Anunciar Produto</h1>
 
-    <form th:action="@{/products/save}" method="post" enctype="multipart/form-data" id="form-anuncio" class="anuncio-form">
+    <form action="/products/save" method="post" enctype="multipart/form-data" id="form-anuncio" class="anuncio-form">
         <div class="form-coluna">
             <div class="form-grupo">
                 <label for="name">Título do anúncio *</label>
@@ -45,7 +51,6 @@
 
             <div class="form-grupo">
                 <label for="categoria">Categoria *</label>
-<<<<<<< HEAD
                 <select id="categoria" name="categoryId" required>
                     <option value="">Selecione uma categoria</option>
                     <option value="1">Eletrônicos</option>
@@ -55,27 +60,12 @@
                     <option value="5">Veículos</option>
                     <option value="6">Imóveis</option>
                     <option value="7">Produtos Reciclados</option>
-=======
-                <select id="categoria" name="categoria" required>
-                    <option value="">Selecione uma categoria</option>
-                    <option value="eletronicos">Eletrônicos</option>
-                    <option value="moveis">Móveis</option>
-                    <option value="moda">Moda</option>
-                    <option value="esportes">Esportes</option>
-                    <option value="veiculos">Veículos</option>
-                    <option value="imoveis">Imóveis</option>
-                    <option value="reciclados">Produtos Reciclados</option>
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
                 </select>
             </div>
 
             <div class="form-grupo">
                 <label for="tipo-negociacao">Tipo de negociação *</label>
-<<<<<<< HEAD
                 <select id="tipo-negociacao" name="tipoNegociacao" required>
-=======
-                <select id="tipo-negociacao" name="tipo-negociacao" required>
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
                     <option value="">Selecione uma opção</option>
                     <option value="troca">Troca</option>
                     <option value="doacao">Doação</option>
@@ -83,16 +73,10 @@
             </div>
 
             <div class="form-grupo">
-<<<<<<< HEAD
-                <label for="price">Preço (R$) *</label>
-                <input type="number" id="price" name="price" step="0.01" min="0" required
-                       placeholder="0.00">
-                <small>Para doações, coloque 0. Para trocas, coloque o valor estimado.</small>
-=======
-                <label for="valor">Valor desejado *</label>
-                <input type="text" id="valor" name="valor" required
-                       placeholder="Ex: Troco por bicicleta">
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
+                <label for="valor-troca">O que você deseja em troca? *</label>
+                <input type="text" id="valor-troca" name="valorTroca" required
+                       placeholder="Ex: Troco por bicicleta ou notebook">
+                <small>Descreva o que você aceita em troca (produtos, valores, etc.)</small>
             </div>
 
             <div class="form-grupo">
@@ -114,14 +98,16 @@
 
         <div class="form-coluna">
             <div class="form-grupo">
-                <label>Fotos do produto *</label>
+                <label>Foto do produto *</label>
                 <div class="upload-area" id="upload-area">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Clique para adicionar fotos ou arraste e solte</p>
-                    <p><small>Máximo 10 fotos. Formatos: JPG, PNG</small></p>
+                    <p>Clique para adicionar uma foto ou arraste e solte</p>
+                    <p><small>Formatos: JPG, PNG (máx. 5MB)</small></p>
                 </div>
-                <input type="file" id="imageFile" name="imageFile" multiple accept="image/*" style="display: none;">
+                <!-- CORREÇÃO: Removido multiple e adicionado required -->
+                <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;" required>
                 <div id="imagens-preview"></div>
+                <small id="image-error" style="color: red; display: none;">Por favor, selecione uma imagem</small>
             </div>
 
             <div class="form-grupo">
@@ -136,27 +122,18 @@
                        placeholder="Telefone, WhatsApp ou e-mail">
             </div>
 
-            <div class="form-grupo">
-<<<<<<< HEAD
-                <label for="discount">Desconto (%)</label>
-                <input type="number" id="discount" name="discount" step="1" min="0" max="100"
-                       placeholder="0" value="0">
-            </div>
+            <!-- Campos ocultos para manter compatibilidade com o backend -->
+            <input type="hidden" id="price" name="price" value="0">
+            <input type="hidden" id="discount" name="discount" value="0">
 
             <div class="form-grupo checkbox-group">
                 <input type="checkbox" id="featured" name="featured" value="true">
                 <label for="featured">Destacar este produto</label>
-=======
-                <label for="tags">Tags (opcional)</label>
-                <input type="text" id="tags" name="tags"
-                       placeholder="Ex: smartphone, samsung, eletrônico, usado">
-                <small>Separe as tags por vírgula</small>
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
             </div>
         </div>
 
         <div class="botoes-anuncio">
-            <a th:href="@{/perfil}" class="btn btn-cancelar">Cancelar</a>
+            <a href="/perfil" class="btn btn-cancelar">Cancelar</a>
             <button type="submit" class="btn btn-publicar">Publicar Anúncio</button>
         </div>
     </form>
@@ -204,35 +181,44 @@
         const fileInput = document.getElementById('imageFile');
         const imagensPreview = document.getElementById('imagens-preview');
         const formAnuncio = document.getElementById('form-anuncio');
+        const imageError = document.getElementById('image-error');
+        const tipoNegociacao = document.getElementById('tipo-negociacao');
+        const valorTrocaInput = document.getElementById('valor-troca');
 
-        // Array para armazenar as imagens
-        let imagensSelecionadas = [];
+        // Variável para controlar se uma imagem foi selecionada
+        let imagemSelecionada = null;
 
         // Evento para abrir o seletor de arquivos ao clicar na área de upload
         uploadArea.addEventListener('click', function() {
             fileInput.click();
         });
 
-        // Evento para processar arquivos selecionados
+        // Evento para processar arquivo selecionado
         fileInput.addEventListener('change', function(e) {
             const files = e.target.files;
 
-            for (let i = 0; i < files.length; i++) {
-                if (imagensSelecionadas.length >= 10) {
-                    alert('Máximo de 10 imagens atingido.');
-                    break;
-                }
-
-                const file = files[i];
+            if (files.length > 0) {
+                const file = files[0];
 
                 // Verificar se é uma imagem
                 if (!file.type.match('image.*')) {
-                    alert('Por favor, selecione apenas imagens.');
-                    continue;
+                    alert('Por favor, selecione apenas imagens (JPG, PNG).');
+                    fileInput.value = '';
+                    return;
                 }
 
-                // Adicionar ao array
-                imagensSelecionadas.push(file);
+                // Verificar tamanho do arquivo (máx 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 5MB.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                imagemSelecionada = file;
+                imageError.style.display = 'none';
+
+                // Limpar preview anterior
+                imagensPreview.innerHTML = '';
 
                 // Criar preview
                 const reader = new FileReader();
@@ -251,9 +237,10 @@
 
                     // Evento para remover a imagem
                     btnRemover.addEventListener('click', function() {
-                        const index = Array.from(imagensPreview.children).indexOf(previewDiv);
-                        imagensSelecionadas.splice(index, 1);
+                        imagemSelecionada = null;
+                        fileInput.value = '';
                         previewDiv.remove();
+                        imageError.style.display = 'block';
                     });
 
                     previewDiv.appendChild(img);
@@ -263,9 +250,6 @@
 
                 reader.readAsDataURL(file);
             }
-
-            // Limpar o input para permitir selecionar os mesmos arquivos novamente
-            fileInput.value = '';
         });
 
         // Permitir arrastar e soltar imagens
@@ -287,11 +271,34 @@
             uploadArea.style.backgroundColor = 'transparent';
 
             const files = e.dataTransfer.files;
-            fileInput.files = files;
+            if (files.length > 0) {
+                fileInput.files = files;
 
-            // Disparar evento change manualmente
-            const event = new Event('change');
-            fileInput.dispatchEvent(event);
+                // Disparar evento change manualmente
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
+
+        // Validação do formulário
+        formAnuncio.addEventListener('submit', function(e) {
+            if (!imagemSelecionada) {
+                e.preventDefault();
+                imageError.style.display = 'block';
+                uploadArea.scrollIntoView({ behavior: 'smooth' });
+                alert('Por favor, selecione uma imagem para o produto.');
+            }
+        });
+
+        // Atualizar placeholder baseado no tipo de negociação
+        tipoNegociacao.addEventListener('change', function() {
+            if (this.value === 'doacao') {
+                valorTrocaInput.placeholder = "Descreva para quem gostaria de doar (opcional)";
+                valorTrocaInput.required = false;
+            } else {
+                valorTrocaInput.placeholder = "Ex: Troco por bicicleta ou notebook";
+                valorTrocaInput.required = true;
+            }
         });
     });
 </script>

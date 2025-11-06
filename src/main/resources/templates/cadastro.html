@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,8 +32,7 @@
     <div class="header-group-links" id="headerLinks">
         <nav>
             <a class="header-link" th:href="@{/}">Início</a>
-            <a class="header-link" href="#">Meus anúncios</a>
-            <a class="header-link" href="#">Categorias</a>
+            <a class="header-link" th:href="@{/perfil}">Meus anúncios</a>
 
             <!-- CORREÇÃO: Usar sec:authorize em vez de th:if com isAuthenticated -->
             <a class="header-link" sec:authorize="isAnonymous()" th:href="@{/login}" style="color: #6bb422;">

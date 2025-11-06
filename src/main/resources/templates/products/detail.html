@@ -174,7 +174,17 @@
             <a class="header-link" th:href="@{/}">Início</a>
             <a class="header-link" href="#">Meus anúncios</a>
             <a class="header-link" href="#">Categorias</a>
-            <a class="header-link" th:href="@{/login}" style="color: #6bb422;">Login</a>
+
+            <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
+            <a class="header-link" th:if="${isAuthenticated != null and !isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" th:if="${isAuthenticated != null and isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
+            <a class="header-link" th:if="${isAuthenticated == null}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
         </nav>
         <a class="header-special" th:href="@{/products/new}">Anuncie Grátis</a>
     </div>
@@ -184,18 +194,18 @@
 
 <div class="product-detail-container">
     <!-- Botão Voltar -->
-    <a th:href="@{/}" class="back-button">
+    <a th:href="@{/products}" class="back-button">
         <i class="fas fa-arrow-left"></i>
-        Voltar para a página inicial
+        Voltar para todos os produtos
     </a>
 
     <!-- Detalhes do Produto -->
     <div class="product-detail">
         <!-- Imagem do Produto -->
         <div class="product-image">
-            <img th:src="${product.imageUrl}"
+            <img th:src="${product.imageUrl != null} ? ${product.imageUrl} : '/img/web/placeholder.jpg'"
                  th:alt="${product.name}"
-                 onerror="this.src='https://via.placeholder.com/600x400?text=Imagem+Indisponível'">
+                 onerror="this.src='/img/web/placeholder.jpg'">
         </div>
 
         <!-- Informações do Produto -->
@@ -203,18 +213,22 @@
             <h1 class="product-title" th:text="${product.name}"></h1>
 
             <div class="product-price">
-                    <span th:if="${product.discount > 0}" class="discount-price">
-                        R$ <span th:text="${#numbers.formatDecimal(product.getFinalPrice(), 1, 2, 'POINT')}"></span>
-                    </span>
+                <!-- Preço com desconto -->
+                <span th:if="${product.discount > 0}">
+                    R$ <span th:text="${#numbers.formatDecimal(product.price * (1 - product.discount/100), 1, 2, 'POINT')}"></span>
+                </span>
+                <!-- Preço normal -->
                 <span th:unless="${product.discount > 0}">
-                        R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
-                    </span>
+                    R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
+                </span>
+                <!-- Preço original com desconto -->
                 <span th:if="${product.discount > 0}" class="original-price">
-                        R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
-                    </span>
+                    R$ <span th:text="${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}"></span>
+                </span>
+                <!-- Badge de desconto -->
                 <span th:if="${product.discount > 0}" class="discount-badge">
-                        <span th:text="'-' + ${#numbers.formatDecimal(product.discount, 1, 0, 'POINT')} + '%'"></span>
-                    </span>
+                    <span th:text="'-' + ${#numbers.formatDecimal(product.discount, 1, 0, 'POINT')} + '%'"></span>
+                </span>
             </div>
 
             <div class="product-description" th:text="${product.description}"></div>
@@ -234,13 +248,14 @@
                 <div class="meta-item">
                     <i class="fas fa-calendar"></i>
                     <span>Anunciado em: </span>
-                    <span th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy')}"></span>
+                    <span th:if="${product.createdAt != null}" th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy')}"></span>
+                    <span th:if="${product.createdAt == null}">Data não informada</span>
                 </div>
             </div>
 
             <!-- Botões de Ação -->
             <div class="action-buttons">
-                <a href="#" class="btn-contact">
+                <a href="#" class="btn-contact" onclick="showContactInfo()">
                     <i class="fas fa-comments"></i>
                     Entrar em Contato
                 </a>
@@ -285,17 +300,34 @@
     </div>
 
     <!-- Produtos Relacionados -->
-    <div style="margin-top: 50px;">
+    <div style="margin-top: 50px;" th:if="${not #lists.isEmpty(relatedProducts)}">
         <h2 style="margin-bottom: 20px;">Produtos Relacionados</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <!-- Aqui você pode adicionar produtos relacionados -->
-            <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
-                <p>Outros produtos da mesma categoria aparecerão aqui</p>
-                <a th:href="@{/products}" class="btn-contact" style="margin-top: 10px;">
-                    Ver Todos os Produtos
+            <div class="product-card" th:each="relatedProduct : ${relatedProducts}">
+                <a th:href="@{/products/detail/{id}(id=${relatedProduct.id})}">
+                    <div class="product-image" style="height: 200px;">
+                        <img th:src="${relatedProduct.imageUrl != null} ? ${relatedProduct.imageUrl} : '/img/web/placeholder.jpg'"
+                             th:alt="${relatedProduct.name}"
+                             onerror="this.src='/img/web/placeholder.jpg'"
+                             style="height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-info" style="padding: 10px;">
+                        <div class="product-price" style="font-size: 1.2rem;">
+                            R$ <span th:text="${#numbers.formatDecimal(relatedProduct.price, 1, 2, 'POINT')}"></span>
+                        </div>
+                        <div class="product-title" style="font-size: 1rem;" th:text="${relatedProduct.name}"></div>
+                    </div>
                 </a>
             </div>
         </div>
+    </div>
+
+    <!-- Link para ver mais produtos -->
+    <div style="text-align: center; margin-top: 30px;">
+        <a th:href="@{/products}" class="btn-contact">
+            <i class="fas fa-list"></i>
+            Ver Todos os Produtos
+        </a>
     </div>
 </div>
 
@@ -364,6 +396,10 @@
             });
         }
     });
+
+    function showContactInfo() {
+        alert('Para entrar em contato com o vendedor, utilize as informações de contato na seção "Informações do Vendedor".');
+    }
 </script>
 </body>
 </html>

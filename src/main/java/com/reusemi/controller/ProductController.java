@@ -1,12 +1,8 @@
 package com.reusemi.controller;
 
-<<<<<<< HEAD
 import com.reusemi.entity.Category;
 import com.reusemi.entity.Product;
 import com.reusemi.repo.CategoryRepository;
-=======
-import com.reusemi.entity.Product;
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 import com.reusemi.repo.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,19 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-<<<<<<< HEAD
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.time.LocalDateTime;
-=======
-
-import java.io.File;
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 import java.util.List;
 import java.util.UUID;
-
-
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -36,52 +26,98 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     // Página principal de produtos
     @GetMapping
     public String listProducts(Model model) {
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
         return "products";
+
     }
 
     // Formulário para adicionar produto
-<<<<<<< HEAD
-    // No método showProductForm:
     @GetMapping("/new")
     public String showProductForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryRepository.findByActiveTrueOrderByNameAsc());
         return "product-form";
     }
-=======
-    @GetMapping("/new")
-    public String showProductForm(Model model) {
-        model.addAttribute("product", new Product());
-        return "product-form";
-    }
 
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
-    // Salvar produto
+    // Salvar produto - Versão 1: com upload de imagem
     @PostMapping("/save")
     public String saveProduct(@ModelAttribute Product product,
-                              @RequestParam("imageFile") MultipartFile imageFile) {
+                              @RequestParam("imageFile") MultipartFile imageFile,
+                              RedirectAttributes redirectAttributes) {
         try {
             // Upload da imagem
-            if (!imageFile.isEmpty()) {
+            if (imageFile != null && !imageFile.isEmpty()) {
                 String imageName = uploadImageFile(imageFile);
                 product.setImageUrl(imageName);
+                System.out.println("Imagem salva: " + imageName); // Log para debug
+            } else {
+                System.out.println("Nenhuma imagem foi enviada"); // Log para debug
+                product.setImageUrl("/img/web/placeholder.jpg"); // Imagem padrão
             }
 
+            // Definir datas
+            if (product.getId() == null) {
+                product.setCreatedAt(LocalDateTime.now());
+            }
+            product.setUpdatedAt(LocalDateTime.now());
+
+            // Salvar no banco
             productRepository.save(product);
+
+            redirectAttributes.addFlashAttribute("success", "Produto cadastrado com sucesso!");
+            return "redirect:/products";
+
         } catch (Exception e) {
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Erro ao cadastrar produto: " + e.getMessage());
+            return "redirect:/products/new";
         }
-<<<<<<< HEAD
-        // Redireciona para a página inicial em vez da lista de produtos
-        return "redirect:/";
-=======
-        return "redirect:/products";
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
+    }
+
+    // Salvar produto - Versão 2: com todos os campos do formulário
+    @PostMapping("/save-with-details")
+    public String saveProduct(@RequestParam String name,
+                              @RequestParam String description,
+                              @RequestParam Double price,
+                              @RequestParam Long categoryId,
+                              @RequestParam(required = false) Double discount,
+                              @RequestParam(required = false) Boolean featured,
+                              @RequestParam String condicao,
+                              @RequestParam String tipoNegociacao,
+                              @RequestParam String localizacao,
+                              @RequestParam String contato,
+                              RedirectAttributes redirectAttributes) {
+
+        try {
+            Product product = new Product();
+            product.setName(name);
+            product.setDescription(description);
+            product.setPrice(price);
+            product.setDiscount(discount != null ? discount : 0.0);
+            product.setFeatured(featured != null ? featured : false);
+            product.setCreatedAt(LocalDateTime.now());
+            product.setUpdatedAt(LocalDateTime.now());
+
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada"));
+            product.setCategory(category);
+
+            productRepository.save(product);
+
+            redirectAttributes.addFlashAttribute("success", "Produto cadastrado com sucesso!");
+            return "redirect:/products?success=true";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erro ao cadastrar produto: " + e.getMessage());
+            return "redirect:/products/new?error=true";
+        }
     }
 
     // Upload de imagem (endpoint público)
@@ -113,7 +149,7 @@ public class ProductController {
         return fileName;
     }
 
-    // Método para deletar produto (opcional)
+    // Método para deletar produto
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
@@ -121,13 +157,12 @@ public class ProductController {
     }
 
     // =========================================================================
-    // NOVAS ROTAS PARA OS ANÚNCIOS EM DESTAQUE
+    // ROTAS PARA DETALHES DE PRODUTOS
     // =========================================================================
 
     // Página do anúncio "Troco por bike" - Smartphone Samsung Galaxy S20
     @GetMapping("/s20")
     public String samsungS20Detail(Model model) {
-        // Busca o produto do banco ou cria dados de exemplo
         Product product = productRepository.findById(1L)
                 .orElse(createSamsungS20Product());
         model.addAttribute("product", product);
@@ -171,52 +206,22 @@ public class ProductController {
         return productRepository.findById(id)
                 .map(product -> {
                     model.addAttribute("product", product);
-                    // Aqui você poderia buscar o vendedor real do banco
                     model.addAttribute("seller", createGenericSeller());
+
+                    // Buscar produtos relacionados (mesma categoria)
+                    List<Product> relatedProducts = productRepository.findByCategoryId(
+                                    product.getCategory() != null ? product.getCategory().getId() : 1L
+                            ).stream()
+                            .filter(p -> !p.getId().equals(id))
+                            .limit(4)
+                            .collect(Collectors.toList());
+                    model.addAttribute("relatedProducts", relatedProducts);
+
                     return "products/detail";
                 })
                 .orElse("redirect:/products");
     }
 
-<<<<<<< HEAD
-    @PostMapping("/products/save")
-    public String saveProduct(@RequestParam String name,
-                              @RequestParam String description,
-                              @RequestParam Double price,
-                              @RequestParam Long categoryId,
-                              @RequestParam(required = false) Double discount,
-                              @RequestParam(required = false) Boolean featured,
-                              @RequestParam String condicao,
-                              @RequestParam String tipoNegociacao,
-                              @RequestParam String localizacao,
-                              @RequestParam String contato,
-                              RedirectAttributes redirectAttributes) {
-
-        try {
-            Product product = new Product();
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(price);
-            product.setDiscount(discount != null ? discount : 0.0);
-            product.setFeatured(featured != null ? featured : false);
-            product.setCreatedAt(LocalDateTime.now());
-            product.setUpdatedAt(LocalDateTime.now());
-
-            Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada"));
-            product.setCategory(category);
-
-            productRepository.save(product);
-
-            return "redirect:/products?success=true";
-
-        } catch (Exception e) {
-            return "redirect:/products/new?error=true";
-        }
-    }
-
-=======
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
     // =========================================================================
     // MÉTODOS AUXILIARES PARA DADOS DE EXEMPLO
     // =========================================================================
@@ -227,7 +232,7 @@ public class ProductController {
         product.setName("Smartphone Samsung Galaxy S20");
         product.setDescription("Smartphone Samsung Galaxy S20 em ótimo estado de conservação. Equipamento com 128GB de armazenamento, tela de 6.2 polegadas, câmera tripla de 64MP + 12MP + 12MP. Inclui carregador original e capa protetora.");
         product.setImageUrl("samsung-s20.jpg");
-        // Adicione outros campos conforme sua entidade Product
+        product.setPrice(899.99);
         return product;
     }
 
@@ -237,6 +242,7 @@ public class ProductController {
         product.setName("Sofá 3 lugares em ótimo estado");
         product.setDescription("Sofá 3 lugares em ótimo estado de conservação, quase novo. Estofado em tecido antimanchas de alta qualidade, cor cinza. Estrutura em madeira maciça, muito resistente.");
         product.setImageUrl("sofa-3-lugares.jpg");
+        product.setPrice(1200.00);
         return product;
     }
 
@@ -246,6 +252,7 @@ public class ProductController {
         product.setName("Bicicleta Caloi Aro 29");
         product.setDescription("Bicicleta Caloi Aro 29, perfeita para exercícios e trilhas leves. Em excelente estado de conservação, com pouquíssimo uso.");
         product.setImageUrl("bike-caloi.jpg");
+        product.setPrice(450.00);
         return product;
     }
 
@@ -255,6 +262,7 @@ public class ProductController {
         product.setName("Notebook Dell Inspiron 17");
         product.setDescription("Notebook Dell Inspiron 17 com 16GB RAM, SSD 512GB. Equipamento em perfeito estado, pouco uso.");
         product.setImageUrl("notebook-dell.jpg");
+        product.setPrice(2500.00);
         return product;
     }
 
@@ -318,12 +326,4 @@ public class ProductController {
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
     }
-<<<<<<< HEAD
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-
-=======
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 }

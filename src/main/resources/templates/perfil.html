@@ -1,243 +1,668 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - REUSEMI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{css/style.css}">
+    <title>Meu Perfil - Reusemi</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" th:href="@{/img/web/favicon-32x32.png}" type="image/x-icon">
+    <style>
+        /* Estilos específicos para a página de perfil */
+        .profile-container {
+            display: flex;
+            margin: 30px 130px;
+            gap: 20px;
+        }
+
+        .profile-sidebar {
+            width: 25%;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 2px 6px 9px rgba(0,0,0,0.1);
+        }
+
+        .profile-content {
+            width: 75%;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 2px 6px 9px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit:cover;
+        }
+
+        .profile-info h1 {
+            color: var(--verde-principal);
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--cinza-claro);
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--verde-secundario);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--cinza-claro);
+        }
+
+        .profile-menu {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .profile-menu li {
+            margin-bottom: 10px;
+        }
+
+        .profile-menu a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: var(--cinza);
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-menu a:hover, .profile-menu a.active {
+            background-color: rgba(128, 231, 26, 0.1);
+            color: var(--verde-secundario);
+        }
+
+        .profile-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .profile-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--cinza-claro);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .profile-tab.active {
+            color: var(--verde-secundario);
+            border-bottom: 2px solid var(--verde-secundario);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            cursor: pointer;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 2px 6px 9px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 150px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            background-color: #6bb422;
+            border-radius: 10px;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: var(--verde-secundario);
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .product-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            height: 40px;
+            color: var(--cinza);
+            overflow: hidden;
+        }
+
+        .product-location {
+            font-size: 12px;
+            color: #777;
+            display: flex;
+            align-items: center;
+        }
+
+        .product-location i {
+            margin-right: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--cinza-claro);
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        .profile-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--cinza);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: var(--verde-secundario);
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: var(--verde-terciario);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(108, 202, 13);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            margin-right: 10px;
+        }
+
+        .rating-value {
+            font-weight: bold;
+            color: var(--cinza);
+        }
+
+        .review-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .review-author {
+            font-weight: bold;
+            color: var(--cinza);
+        }
+
+        .review-date {
+            color: var(--cinza-claro);
+            font-size: 12px;
+        }
+
+        .review-content {
+            color: var(--cinza);
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+                margin: 20px;
+            }
+
+            .profile-sidebar, .profile-content {
+                width: 100%;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <header>
-        <div class="header-esquerda">
-            <a th:href="@{/}"><img class="logo" th:src="@{img/web/logo.png}" alt="logo"></a>
+<header>
+    <div class="header-esquerda">
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/web/logo.png}" alt="logo"></a>
+        <form action="/buscar" method="GET">
+            <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
+            <button class="buscar" type="submit">Buscar</button>
+        </form>
+    </div>
 
-            <!-- Botão Hamburguer para Mobile -->
-            <button class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <div class="header-group-links">
+        <nav>
+            <a class="header-link" th:href="@{/}">Início</a>
+            <a class="header-link" th:href="@{/perfil}">Meus anúncios</a>
 
-            <form action="/buscar" method="GET">
-                <input class="pesquisar" type="search" name="q" placeholder="Pesquisar...">
-                <button class="buscar" type="submit">Buscar</button>
-            </form>
-        </div>
+            <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
+            <a class="header-link" th:if="${isAuthenticated != null and !isAuthenticated}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+            <a class="header-link" th:if="${isAuthenticated != null and isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
+                Meu Perfil
+            </a>
+            <a class="header-link" th:if="${isAuthenticated == null}" th:href="@{/login}" style="color: #6bb422;">
+                Login
+            </a>
+        </nav>
+        <a class="header-special" th:href="@{/products/new}">Anuncie Grátis</a>
+    </div>
+</header>
 
-        <div class="header-group-links" id="headerLinks">
-            <nav>
-                <a class="header-link" th:href="@{/}">Início</a>
-                <a class="header-link" href="#">Meus anúncios</a>
-                <a class="header-link" href="#">Categorias</a>
+<div class="linha-fina"></div>
 
-                <!-- CONDICIONAL: Mostrar Login OU Meu Perfil -->
-                <div th:if="${#authorization.expression('!isAuthenticated()')} " style="color: #6bb422;">
-                    Login
-                </div>
-                <a class="header-link" th:if="${isAuthenticated}" th:href="@{/perfil}" style="color: #6bb422;">
-                    Meu Perfil
-                </a>
-            </nav>
-            <a class="header-special" th:href="@{/products}">Anuncie Grátis</a>
-        </div>
-    </header>
+<!-- Categorias Dinâmicas -->
+<div class="categories" th:if="${not #lists.isEmpty(categories)}">
+    <a th:href="@{/products}" th:each="category : ${categories}">
+        <span th:text="${category.name}"></span>
+    </a>
+</div>
 
-
-    <section class="profile-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="profile-card">
-                        <!-- Cabeçalho do Perfil -->
-                        <div class="profile-header">
-                            <div class="profile-avatar">
-                                <i class="bi bi-person"></i>
-                            </div>
-                            <h2 th:text="${usuario.nome}">Nome do Usuário</h2>
-                            <p class="mb-0" th:text="${usuario.email}">usuario@email.com</p>
-                            <span class="badge bg-success mt-2" th:text="${usuario.nivel}">USUÁRIO</span>
-                        </div>
-
-                        <div class="row">
-                            <!-- Menu Lateral -->
-                            <div class="col-md-3">
-                                <div class="nav flex-column nav-pills p-3" id="v-pills-tab" role="tablist">
-                                    <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab">
-                                        <i class="bi bi-person"></i> Perfil
-                                    </button>
-                                    <button class="nav-link" id="v-pills-itens-tab" data-bs-toggle="pill" data-bs-target="#v-pills-itens" type="button" role="tab">
-                                        <i class="bi bi-box"></i> Meus Itens
-                                    </button>
-                                    <button class="nav-link" id="v-pills-stats-tab" data-bs-toggle="pill" data-bs-target="#v-pills-stats" type="button" role="tab">
-                                        <i class="bi bi-bar-chart"></i> Estatísticas
-                                    </button>
-                                    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab">
-                                        <i class="bi bi-gear"></i> Configurações
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Conteúdo -->
-                            <div class="col-md-9">
-                                <div class="tab-content" id="v-pills-tabContent">
-                                    <!-- Aba Perfil -->
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel">
-                                        <h4>Informações Pessoais</h4>
-                                        <div class="row mt-4">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label"><strong>Nome Completo</strong></label>
-                                                    <p th:text="${usuario.nome}">Nome do Usuário</p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label"><strong>Email</strong></label>
-                                                    <p th:text="${usuario.email}">usuario@email.com</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label"><strong>Telefone</strong></label>
-                                                    <p th:text="${usuario.telefone ?: 'Não informado'}">(11) 99999-9999</p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label"><strong>Endereço</strong></label>
-                                                    <p th:text="${usuario.endereco ?: 'Não informado'}">Endereço do usuário</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <h5 class="mt-4">Editar Perfil</h5>
-                                        <form th:action="@{/perfil/atualizar}" method="post">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Nome</label>
-                                                        <input type="text" class="form-control" name="nome" th:value="${usuario.nome}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Telefone</label>
-                                                        <input type="tel" class="form-control" name="telefone" th:value="${usuario.telefone}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Endereço</label>
-                                                <textarea class="form-control" name="endereco" rows="3" th:text="${usuario.endereco}"></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="bi bi-check-circle"></i> Salvar Alterações
-                                            </button>
-                                        </form>
-                                    </div>
-
-                                    <!-- Aba Meus Itens -->
-                                    <div class="tab-pane fade" id="v-pills-itens" role="tabpanel">
-                                        <h4>Meus Itens</h4>
-                                        <p class="text-muted">Gerencie os itens que você anunciou para troca.</p>
-                                        <a th:href="@{/itens/novo}" class="btn btn-success mb-3">
-                                            <i class="bi bi-plus-circle"></i> Novo Item
-                                        </a>
-                                        <a th:href="@{/itens/meus-itens}" class="btn btn-outline-primary mb-3 ms-2">
-                                            <i class="bi bi-list"></i> Ver Todos
-                                        </a>
-                                    </div>
-
-                                    <!-- Aba Estatísticas -->
-                                    <div class="tab-pane fade" id="v-pills-stats" role="tabpanel">
-                                        <h4>Minhas Estatísticas</h4>
-                                        <div class="profile-stats">
-                                            <div class="stat-item">
-                                                <div class="stat-number">15</div>
-                                                <div class="stat-label">Itens Anunciados</div>
-                                            </div>
-                                            <div class="stat-item">
-                                                <div class="stat-number">8</div>
-                                                <div class="stat-label">Trocas Realizadas</div>
-                                            </div>
-                                            <div class="stat-item">
-                                                <div class="stat-number">12</div>
-                                                <div class="stat-label">Propostas Recebidas</div>
-                                            </div>
-                                            <div class="stat-item">
-                                                <div class="stat-number">95%</div>
-                                                <div class="stat-label">Avaliação</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Aba Configurações -->
-                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel">
-                                        <h4>Configurações da Conta</h4>
-                                        <div class="alert alert-info">
-                                            <i class="bi bi-info-circle"></i> Aqui você pode gerenciar as configurações da sua conta.
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Notificações por Email</label>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" checked>
-                                                <label class="form-check-label">Receber notificações</label>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Privacidade</label>
-                                            <select class="form-select">
-                                                <option selected>Perfil Público</option>
-                                                <option>Perfil Privado</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <button class="btn btn-outline-danger">
-                                            <i class="bi bi-trash"></i> Excluir Conta
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<div class="profile-container">
+    <aside class="profile-sidebar">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <img th:src="${user != null} ? ${user.avatarUrl} : 'https://ui-avatars.com/api/?name=Usuário&background=6bb422&color=fff'"
+                     th:alt="${user != null} ? ${user.name} : 'Usuário'">
+            </div>
+            <div class="profile-info">
+                <h1 th:text="${user != null} ? ${user.name} : 'Usuário'">Usuário</h1>
+                <p><i class="fas fa-map-marker-alt"></i> <span th:text="${user != null and user.cidade != null} ? ${user.cidade + ', ' + user.estado} : 'Localização não informada'">São Paulo, SP</span></p>
+                <p>Membro desde: <span th:text="${user != null and user.dataCadastro != null} ? ${#temporals.format(user.dataCadastro, 'MMM yyyy')} : 'Jan 2024'">Jan 2024</span></p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" th:text="${userStats != null} ? ${userStats.totalAnuncios} : '0'">0</div>
+                        <div class="stat-label">Anúncios</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" th:text="${userStats != null} ? ${userStats.totalTrocas} : '0'">0</div>
+                        <div class="stat-label">Trocas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" th:text="${userStats != null} ? ${userStats.avaliacao} : '0.0'">0.0</div>
+                        <div class="stat-label">Avaliação</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>REUSEMI</h5>
-                    <p>Promovendo trocas sustentáveis e consumo consciente.</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <p class="mb-0">&copy; 2025 REUSEMI. Todos os direitos reservados.</p>
+        <ul class="profile-menu">
+            <li><a href="#" class="active"><i class="fas fa-user"></i> Meu Perfil</a></li>
+            <li><a href="#meus-anuncios"><i class="fas fa-box"></i> Meus Anúncios</a></li>
+            <li><a href="#favoritos"><i class="fas fa-heart"></i> Favoritos</a></li>
+            <li><a href="#mensagens"><i class="fas fa-comments"></i> Mensagens</a></li>
+            <li><a href="#configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+            <li><a href="#ajuda"><i class="fas fa-question-circle"></i> Ajuda</a></li>
+            <li><a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+        </ul>
+
+        <div class="rating">
+            <div class="rating-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+            </div>
+            <div class="rating-value" th:text="${userStats != null} ? ${userStats.avaliacao + '/5 (' + userStats.totalAvaliacoes + ' avaliações)'} : '0.0/5 (0 avaliações)'">0.0/5 (0 avaliações)</div>
+        </div>
+    </aside>
+
+    <main class="profile-content">
+        <div class="profile-tabs">
+            <button class="profile-tab active" data-tab="anuncios">Meus Anúncios</button>
+            <button class="profile-tab" data-tab="favoritos">Favoritos</button>
+            <button class="profile-tab" data-tab="avaliacoes">Avaliações</button>
+            <button class="profile-tab" data-tab="configuracoes">Configurações</button>
+        </div>
+
+        <!-- Tab Meus Anúncios -->
+        <div id="anuncios-tab" class="tab-content active">
+            <h2 class="section-title">
+                Meus Anúncios
+                <a th:href="@{/products/new}" class="view-all">Novo Anúncio</a>
+            </h2>
+
+            <div class="product-grid" th:if="${not #lists.isEmpty(meusProdutos)}">
+                <div class="product-card" th:each="produto : ${meusProdutos}">
+                    <a th:href="@{/products/detail/{id}(id=${produto.id})}">
+                        <div class="product-image">
+                                <span class="product-badge" th:classappend="${produto.status == 'vendido'} ? 'vendido' : ${produto.status == 'pausado'} ? 'pausado' : 'ativo'"
+                                      th:text="${produto.status == 'vendido'} ? 'Vendido' : ${produto.status == 'pausado'} ? 'Pausado' : 'Ativo'">
+                                    Ativo
+                                </span>
+                            <img th:src="${produto.imageUrl != null} ? ${produto.imageUrl} : '/img/web/placeholder.jpg'"
+                                 th:alt="${produto.name}">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price" th:text="${produto.precoFormatado}">R$ 0,00</div>
+                            <div class="product-title" th:text="${produto.name}">Nome do produto</div>
+                            <div class="product-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:text="${produto.localizacao != null} ? ${produto.localizacao} : 'Localização não informada'">São Paulo, SP</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Fecha o menu mobile ao clicar em um item
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                const navbar = document.querySelector('.navbar-collapse');
-                if (navbar.classList.contains('show')) {
-                    navbar.classList.remove('show');
-                }
+            <div class="empty-state" th:if="${#lists.isEmpty(meusProdutos)}">
+                <i class="fas fa-box-open"></i>
+                <h3>Nenhum anúncio encontrado</h3>
+                <p>Você ainda não criou nenhum anúncio.</p>
+                <a th:href="@{/products/new}" class="btn-primary">Criar Primeiro Anúncio</a>
+            </div>
+        </div>
+
+        <!-- Tab Favoritos -->
+        <div id="favoritos-tab" class="tab-content">
+            <h2 class="section-title">Meus Favoritos</h2>
+
+            <div class="product-grid" th:if="${not #lists.isEmpty(favoritos)}">
+                <div class="product-card" th:each="favorito : ${favoritos}">
+                    <a th:href="@{/products/detail/{id}(id=${favorito.id})}">
+                        <div class="product-image">
+                            <img th:src="${favorito.imageUrl != null} ? ${favorito.imageUrl} : '/img/web/placeholder.jpg'"
+                                 th:alt="${favorito.name}">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-price" th:text="${favorito.precoFormatado}">R$ 0,00</div>
+                            <div class="product-title" th:text="${favorito.name}">Nome do produto</div>
+                            <div class="product-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:text="${favorito.localizacao != null} ? ${favorito.localizacao} : 'Localização não informada'">São Paulo, SP</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(favoritos)}">
+                <i class="fas fa-heart"></i>
+                <h3>Nenhum favorito</h3>
+                <p>Você ainda não favoritou nenhum produto.</p>
+                <a th:href="@{/products}" class="btn-primary">Explorar Produtos</a>
+            </div>
+        </div>
+
+        <!-- Tab Avaliações -->
+        <div id="avaliacoes-tab" class="tab-content">
+            <h2 class="section-title">Avaliações Recebidas</h2>
+
+            <div th:if="${not #lists.isEmpty(avaliacoes)}">
+                <div class="review-item" th:each="avaliacao : ${avaliacoes}">
+                    <div class="review-header">
+                        <div class="review-author" th:text="${avaliacao.autor}">Maria Santos</div>
+                        <div class="review-date" th:text="${#temporals.format(avaliacao.data, 'dd/MM/yyyy')}">15/05/2024</div>
+                    </div>
+                    <div class="rating-stars">
+                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, 5)}"
+                           th:classappend="${i <= avaliacao.nota} ? 'fas fa-star' : ${i <= avaliacao.nota + 0.5} ? 'fas fa-star-half-alt' : 'far fa-star'"></i>
+                    </div>
+                    <div class="review-content" th:text="${avaliacao.comentario}">
+                        Excelente vendedor! Produto exatamente como descrito e entrega super rápida. Recomendo!
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(avaliacoes)}">
+                <i class="fas fa-comments"></i>
+                <h3>Nenhuma avaliação</h3>
+                <p>Você ainda não recebeu nenhuma avaliação.</p>
+            </div>
+        </div>
+
+        <!-- Tab Configurações -->
+        <div id="configuracoes-tab" class="tab-content">
+            <h2 class="section-title">Configurações da Conta</h2>
+
+            <form class="profile-form" th:action="@{/perfil/atualizar}" method="post">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" class="form-control"
+                           th:value="${user != null} ? ${user.name} : ''" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                           th:value="${user != null} ? ${user.email} : ''" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" class="form-control"
+                           th:value="${user != null} ? ${user.telefone} : ''">
+                </div>
+
+                <div class="form-group">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade" class="form-control"
+                           th:value="${user != null} ? ${user.cidade} : ''">
+                </div>
+
+                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado" class="form-control">
+                        <option value="">Selecione um estado</option>
+                        <option value="SP" th:selected="${user != null and user.estado == 'SP'}">São Paulo</option>
+                        <option value="RJ" th:selected="${user != null and user.estado == 'RJ'}">Rio de Janeiro</option>
+                        <option value="MG" th:selected="${user != null and user.estado == 'MG'}">Minas Gerais</option>
+                        <!-- Outros estados -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sobre">Sobre Mim</label>
+                    <textarea id="sobre" name="sobre" class="form-control" rows="4"
+                              th:text="${user != null} ? ${user.sobre} : ''">Sou apaixonado por sustentabilidade e adoro encontrar novos usos para produtos que já não servem mais para outras pessoas.</textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Salvar Alterações</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>REUSEMI</h3>
+                <p>O lugar ideal para comprar, vender e contribuir <br>com o meio ambiente através da reciclagem e<br>reutilização de produtos.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a th:href="@{/products/new}">Como anunciar</a></li>
+                    <li><a href="#">Dicas de segurança</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Sustentabilidade</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#">Fale conosco</a></li>
+                    <li><a th:href="@{/products/new}">Anuncie</a></li>
+                    <li><a href="#">Trabalhe conosco</a></li>
+                    <li><a href="#">Seja um parceiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; 2025 REUSEMI - Todos os direitos reservados. ♻️</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Funcionalidade das abas
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.profile-tab');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove a classe ativa de todas as abas
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                // Adiciona a classe ativa à aba clicada
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.add('active');
             });
         });
 
-        // Mostra mensagem de sucesso se existir
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('sucesso')) {
-            alert('Perfil atualizado com sucesso!');
+        // Menu mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const headerLinks = document.getElementById('headerLinks');
+
+        if (menuToggle && headerLinks) {
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                headerLinks.classList.toggle('active');
+            });
         }
-    </script>
+    });
+</script>
 </body>
 </html>

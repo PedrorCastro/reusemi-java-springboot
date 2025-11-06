@@ -2,7 +2,6 @@ package com.reusemi.repo;
 
 import com.reusemi.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
-<<<<<<< HEAD
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Buscar produtos em destaque
     List<Product> findByFeaturedTrue();
 
-    // Buscar produtos por nome da categoria - CORRIGIDO
+    // Buscar produtos por nome da categoria
     @Query("SELECT p FROM Product p WHERE p.category.name = :categoryName")
     List<Product> findByCategoryName(@Param("categoryName") String categoryName);
 
@@ -32,11 +31,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // Buscar produtos com desconto
     List<Product> findByDiscountGreaterThan(Double discount);
-=======
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
-    // Métodos customizados podem ser adicionados aqui
->>>>>>> 56605cd3e29d058c1166042c73bc3ea6cd7d8064
 }
